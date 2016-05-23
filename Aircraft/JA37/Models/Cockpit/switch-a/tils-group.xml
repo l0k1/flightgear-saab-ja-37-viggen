@@ -30,7 +30,7 @@
             <button>0</button>
             <binding>
                 <command>property-assign</command>
-                <property>sim/ja37/hud/TILS</property>
+                <property>sim/ja37/navigation/tils-group</property>
                 <value>1</value>
             </binding>
             <binding>
@@ -47,7 +47,7 @@
             <button>0</button>
             <binding>
                 <command>property-assign</command>
-                <property>sim/ja37/hud/TILS</property>
+                <property>sim/ja37/navigation/tils-group</property>
                 <value>0</value>
             </binding>
             <binding>
@@ -60,7 +60,7 @@
     <animation>
         <type>rotate</type>
         <object-name>switchLever</object-name>
-        <property>sim/ja37/hud/TILS</property>
+        <property>sim/ja37/navigation/tils-group</property>
         <factor>40</factor>
         <offset-deg>-20</offset-deg>
         <center>
