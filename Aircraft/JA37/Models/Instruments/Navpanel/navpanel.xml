@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+
+    <path>navpanel.ac</path>
+
+    <effect>
+        <inherits-from>Aircraft/JA37/Models/Effects/ja37-cockpit-shader</inherits-from>
+        <object-name>switchMount</object-name>
+        <object-name>switchRed</object-name>
+        <object-name>switchLever</object-name>
+    </effect>
+
+</PropertyList>
