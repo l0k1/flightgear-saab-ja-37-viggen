@@ -9,7 +9,7 @@ OBJECT world
 name "Blender_export__navpanel.ac"
 kids 16
 OBJECT poly
-name "A2_disc_UV_mapped_WEAPONS"
+name "A2_disc_UV_mapped_TILS"
 data 30
 A2_disc_UV_mapped_WEAPONS.mesh
 loc 0.0489694 0.0063829 0.0000488

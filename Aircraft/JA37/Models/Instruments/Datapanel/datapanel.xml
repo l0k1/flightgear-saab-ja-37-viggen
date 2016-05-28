@@ -260,4 +260,165 @@
 		</axis>
 	</animation>
 	
+	<!--
+	**********************************
+	Mode Knob
+	**********************************
+	-->
+	<!-- rotate by 32* -->
+	<animation>
+		<type>pick</type>
+		<object-name>modeSelectKnob</object-name>
+		<action>
+			<button>0</button>
+			<repeatable>false</repeatable>
+			<binding>
+				<command>property-adjust</command>
+				<property>/sim/ja37/navigation/dp-mode</property>
+				<step>1</step>
+				<min>0</min>
+				<max>7</max>
+				<wrap>true</wrap>
+			</binding>
+		</action>
+		<action>
+			<button>1</button>
+			<repeatable>false</repeatable>
+			<binding>
+				<command>property-adjust</command>
+				<property>/sim/ja37/navigation/dp-mode</property>
+				<step>-1</step>
+				<min>0</min>
+				<max>7</max>
+				<wrap>true</wrap>
+			</binding>
+		</action>
+	</animation>
+	
+	
+	<animation>
+		<type>rotate</type>
+		<object-name>modeSelectKnob</object-name>
+		<property>/sim/ja37/navigation/dp-mode</property>
+		<factor>32</factor>
+		<center>
+			<x-m>  0.01125 </x-m>
+			<y-m> -0.02300 </y-m>
+			<z-m>  0.00000 </z-m>
+		</center>
+		<axis>
+			<x>0</x>
+			<y>0</y>
+			<z>1</z>
+		</axis>
+	</animation>
+	<!--
+	**********************************
+	Clear Button Cover
+	**********************************
+	-->
+	
+	<animation>
+		<type>pick</type>
+		<object-name>rensaCover</object-name>
+		<action>
+			<button>0</button>
+			<repeatable>false</repeatable>
+			<binding>
+				<command>property-toggle</command>
+				<property>/sim/ja37/navigation/rensa-cover</property>
+			</binding>
+		</action>
+	</animation>
+	
+	<animation>
+		<type>rotate</type>
+		<object-name>rensaCover</object-name>
+		<property>/sim/ja37/navigation/rensa-cover</property>
+		<factor>135</factor>
+		<center>
+			<x-m> 0   </x-m>
+			<y-m> -.0051   </y-m>
+			<z-m> 0.0066</z-m>
+		</center>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+	</animation>
+	
+	<!--
+	**********************************
+	PosNeg Switch
+	**********************************
+	-->
+	
+	<animation>
+		<type>pick</type>
+		<object-name>posNegSwitch</object-name>
+		<action>
+			<button>0</button>
+			<repeatable>false</repeatable>
+			<binding>
+				<command>property-toggle</command>
+				<property>/sim/ja37/navigation/ispos</property>
+			</binding>
+		</action>
+	</animation>
+	
+	<animation>
+		<type>rotate</type>
+		<object-name>posNegSwitch</object-name>
+		<property>/sim/ja37/navigation/ispos</property>
+		<factor>60</factor>
+		<center>
+			<x-m> -.03860   </x-m>
+			<y-m> 0   </y-m>
+			<z-m> .00463   </z-m>
+		</center>
+		<axis>
+			<x>0</x>
+			<y>1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+	
+	<!--
+	**********************************
+	PosNeg Switch
+	**********************************
+	-->
+	
+	<animation>
+		<type>pick</type>
+		<object-name>inOutSwitch</object-name>
+		<action>
+			<button>0</button>
+			<repeatable>false</repeatable>
+			<binding>
+				<command>property-toggle</command>
+				<property>/sim/ja37/navigation/inout</property>
+			</binding>
+		</action>
+	</animation>
+	
+	<animation>
+		<type>rotate</type>
+		<object-name>inOutSwitch</object-name>
+		<property>/sim/ja37/navigation/inout</property>
+		<factor>60</factor>
+		<center>
+			<x-m> 0   </x-m>
+			<y-m> 0.01861   </y-m>
+			<z-m> 0.00464   </z-m>
+		</center>
+		<axis>
+			<x>-1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+	</animation>
+	
+	
 </PropertyList>
