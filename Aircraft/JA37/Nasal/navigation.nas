@@ -1,3 +1,69 @@
+############################################################
+### Datapanel and Navpanel
+############################################################
+#/sim/ja37/navigation
+#				<rensa-cover type="float">0</rensa-cover> <!-- the cover over the "clear" button -->
+#				<tils-group type="bool">false</tils-group> <!-- false: group 1-10, true: group 11-20 -->
+#				<tils-knob type="int">-1</tils-knob> <!-- -1 is for automatic setting -->
+#				<ispos type="bool">true</ispos> <!-- positive/negative switch, defaults to positive -->
+#				<inout type="bool">true</inout> <!-- in/out switch, defaults to out -->
+#				<dp-mode type="int">1</dp-mode> <!-- mode knob -->
+#				<dp-display type="int" n="0">-1</dp-display> <!-- display, -1 = "X" -->
+#				<dp-display type="int" n="1">-1</dp-display>
+#				<dp-display type="int" n="2">-1</dp-display>
+#				<dp-display type="int" n="3">-1</dp-display>
+#				<dp-display type="int" n="4">-1</dp-display>
+#				<dp-display type="int" n="5">-1</dp-display>
+#				<dp-display type="int" n="6">-1</dp-display>
+#				<dp-display-readout type="int">0</dp-display-readout>
+#				<dp-display-pos type="int">0</dp-display-pos>
+
+
+
+datpan = {
+	nav:				"/sim/ja37/navigation",
+	dp_display:			"/sim/ja37/navigation/dp-display",
+	dp_display_pos:		"/sim/ja37/navigation/dp-display-pos",
+	dp_display_readout:	"/sim/ja37/navigation/dp-display-readout",
+	inout:				"/sim/ja37/navigation/inout",
+	ispos:				"/sim/ja37/navigation/ispos",
+	tils_knob:			"/sim/ja37/navigation/tils-knob",
+	tils_group:  		"/sim/ja37/navigation/tils-group",
+};
+
+foreach(var name; keys(datpan)) {
+	datpan[name] = props.globals.getNode(datpan[name], 1);
+}
+
+# If a button on the numpad is entered, run this function.
+var data_display = func ( key ) {
+	var disp = "";
+	if ( key >= 0 ) {
+		var dat_pos = datpan.dp_display_pos.getValue();
+		datpan.nav.getNode("dp-display["~dat_pos~"]").setValue( key );
+		datpan.dp_display_pos.setValue( datpan.dp_display_pos.getValue() + 1 );
+		if ( datpan.dp_display_pos.getValue() > 6 ) { datpan.dp_display_pos.setValue( 0 ); }
+	} elsif ( key == -1 ) {
+		foreach(var datum; datpan.nav.getChildren("dp-display")) { datum.setValue(-1); }
+		datpan.dp_display_pos.setValue(0);
+		
+	}
+	foreach(var datum; datpan.nav.getChildren("dp-display")) {
+		if ( datum.getValue() != -1 ) {
+			disp = disp ~ datum.getValue();
+		}
+	}
+	if ( disp != "" ) { datpan.dp_display_readout.setValue( num( disp ) ); } else { datpan.dp_display_readout.setValue( 0 ) }
+}
+
+var nav_button = func ( key ) {
+	return;
+}
+
+############################################################
+### Radio Navigation
+############################################################
+
 ######## radio nav initialization
 
 input = {

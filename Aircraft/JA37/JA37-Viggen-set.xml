@@ -727,8 +727,21 @@
             <systems>
                 <oxygen-bottle-pressure type="double">0.0</oxygen-bottle-pressure>
             </systems>
-			<navigation>
+			<navigation> <!-- properties for the datapanel and the navpanel -->
+				<rensa-cover type="float">0</rensa-cover> <!-- the cover over the "clear" button -->
 				<tils-group type="bool">false</tils-group> <!-- false: group 1-10, true: group 11-20 -->
+				<tils-knob type="int">-1</tils-knob> <!-- -1 is for automatic setting -->
+				<ispos type="bool">true</ispos> <!-- positive/negative switch, defaults to positive -->
+				<inout type="bool">true</inout> <!-- in/out switch, defaults to out -->
+				<dp-mode type="int">1</dp-mode> <!-- mode knob -->
+				<dp-display type="int" n="0">-1</dp-display> <!-- display, -1 = "X" -->
+				<dp-display type="int" n="1">-1</dp-display>
+				<dp-display type="int" n="2">-1</dp-display>
+				<dp-display type="int" n="3">-1</dp-display>
+				<dp-display type="int" n="4">-1</dp-display>
+				<dp-display type="int" n="5">-1</dp-display>
+				<dp-display type="int" n="6">-1</dp-display>
+				<dp-display-pos type="int">0</dp-display-pos>
 			</navigation>
         </ja37>
         <replay>
@@ -1866,7 +1879,7 @@
        </entry>
       </log>-->
         <log>
-           <filename>C:/Users/Nikolai/Documents/ja37_missile_performancelog.csv</filename>
+           <filename>C:/Users/soweli/Documents/ja37_missile_performancelog.csv</filename>
            <enabled>false</enabled>
            <interval-ms>50</interval-ms>
            <delimiter>,</delimiter>
