@@ -896,6 +896,7 @@ var HUDnasal = {
         rad_alt:          "position/altitude-agl-ft",#/instrumentation/radar-altimeter/radar-altitude-ft",
         radar_serv:       "instrumentation/radar/serviceable",
         RMActive:         "autopilot/route-manager/active",
+        rmDist:           "autopilot/route-manager/wp/dist",
         RMCurrWaypoint:   "autopilot/route-manager/current-wp",
         RMWaypointBearing:"autopilot/route-manager/wp/bearing-deg",
         roll:             "orientation/roll-deg",
@@ -1589,7 +1590,7 @@ var HUDnasal = {
         desired_alt_delta_ft = me.input.APTgtAlt.getValue()-me.input.alt_ft.getValue();
       } elsif (me.input.APLockAlt.getValue() == "agl-hold" and me.input.APTgtAgl.getValue() != nil) {
         desired_alt_delta_ft = me.input.APTgtAgl.getValue()-me.input.rad_alt.getValue();
-      } elsif(me.input.RMActive.getValue() == 1 and me.input.RMCurrWaypoint.getValue() != nil) {
+      } elsif(me.input.RMActive.getValue() == 1 and me.input.RMCurrWaypoint.getValue() != nil and me.input.RMCurrWaypoint.getValue() >= 0) {
         var i = me.input.RMCurrWaypoint.getValue();
         var rt_alt = getprop("autopilot/route-manager/route/wp["~i~"]/altitude-ft");
         if(rt_alt != nil and rt_alt > 0) {
@@ -2137,6 +2138,25 @@ var HUDnasal = {
 
       me.targetSpeed.hide();
       me.targetDistance1.show();
+      me.targetDistance2.hide();
+      me.distanceText.show();
+      me.distanceScale.show();
+      me.dist_scale_group.show();
+    } elsif (me.input.RMActive.getValue() == TRUE) {
+      var distance = me.input.rmDist.getValue();
+      var line = (200/1024)*canvasWidth;
+      var maxDist = 20;
+      var pixelPerMeter = (line)/(maxDist);
+      var pos = pixelPerMeter*distance;
+      pos = clamp(pos, 0, line);
+      me.mySpeed.setTranslation(pos, 0);
+      me.mySpeed.show();
+
+      me.targetDistance1.setTranslation(0, 0);
+      me.distanceText.setText(sprintf("%.1f", me.input.units.getValue() == 1  ? distance*kts2kmh : distance));
+
+      me.targetSpeed.hide();
+      me.targetDistance1.hide();
       me.targetDistance2.hide();
       me.distanceText.show();
       me.distanceScale.show();
