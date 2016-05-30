@@ -733,7 +733,7 @@
 				<tils-knob type="int">0</tils-knob> <!-- -1 is for automatic setting -->
 				<ispos type="bool">true</ispos> <!-- positive/negative switch, defaults to positive -->
 				<inout type="bool">true</inout> <!-- in/out switch, defaults to out -->
-				<dp-mode type="int">1</dp-mode> <!-- mode knob -->
+				<dp-mode type="int">0</dp-mode> <!-- mode knob -->
 				<dp-display type="int" n="0">-1</dp-display> <!-- display, -1 = "X" -->
 				<dp-display type="int" n="1">-1</dp-display>
 				<dp-display type="int" n="2">-1</dp-display>

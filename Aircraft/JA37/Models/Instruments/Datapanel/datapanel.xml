@@ -300,7 +300,7 @@
 		<type>rotate</type>
 		<object-name>modeSelectKnob</object-name>
 		<property>/sim/ja37/navigation/dp-mode</property>
-		<factor>32</factor>
+		<factor>30</factor>
 		<center>
 			<x-m>  0.01125 </x-m>
 			<y-m> -0.02300 </y-m>
