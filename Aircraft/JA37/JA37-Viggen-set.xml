@@ -732,7 +732,7 @@
 				<rensa-cover type="float">0</rensa-cover> <!-- the cover over the "clear" button -->
 				<tils-group type="bool">false</tils-group> <!-- false: group 1-10, true: group 11-20 -->
 				<tils-knob type="int">0</tils-knob> <!-- -1 is for automatic setting -->
-				<ispos type="bool">true</ispos> <!-- positive/negative switch, defaults to positive -->
+				<ispos type="bool">false</ispos> <!-- positive/negative switch, defaults to positive -->
 				<inout type="bool">true</inout> <!-- in/out switch, defaults to out -->
 				<dp-mode type="int">0</dp-mode> <!-- mode knob -->
 				<dp-display type="int" n="0">-1</dp-display> <!-- display, -1 = "X" -->

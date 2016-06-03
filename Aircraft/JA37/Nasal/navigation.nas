@@ -22,6 +22,7 @@
 
 datpan = {
 	nav:				"/sim/ja37/navigation",
+	dp_mode:			"/sim/ja37/navigation/dp-mode",
 	dp_display:			"/sim/ja37/navigation/dp-display",
 	dp_display_pos:		"/sim/ja37/navigation/dp-display-pos",
 	dp_display_readout:	"/sim/ja37/navigation/dp-display-readout",
@@ -29,6 +30,7 @@ datpan = {
 	ispos:				"/sim/ja37/navigation/ispos",
 	tils_knob:			"/sim/ja37/navigation/tils-knob",
 	tils_group:  		"/sim/ja37/navigation/tils-group",
+	dp_prop_input:		"/sim/ja37/navigation/dp-display-input",
 };
 
 foreach(var name; keys(datpan)) {
@@ -36,7 +38,9 @@ foreach(var name; keys(datpan)) {
 }
 
 # If a button on the numpad is entered, run this function.
+# Only run it if the switch is in the "IN" position.
 var data_display = func ( key ) {
+	if ( datpan.inout.getValue() == 1 ) { return; }
 	var disp = "";
 	if ( key >= 0 ) {
 		var dat_pos = datpan.dp_display_pos.getValue();
@@ -44,21 +48,191 @@ var data_display = func ( key ) {
 		datpan.dp_display_pos.setValue( datpan.dp_display_pos.getValue() + 1 );
 		if ( datpan.dp_display_pos.getValue() > 6 ) { datpan.dp_display_pos.setValue( 0 ); }
 	} elsif ( key == -1 ) {
-		foreach(var datum; datpan.nav.getChildren("dp-display")) { datum.setValue(-1); }
-		datpan.dp_display_pos.setValue(0);
-		
+		clear_display();
 	}
+	
 	foreach(var datum; datpan.nav.getChildren("dp-display")) {
 		if ( datum.getValue() != -1 ) {
 			disp = disp ~ datum.getValue();
+		} else {
+			break;
 		}
 	}
+	
 	if ( disp != "" ) { datpan.dp_display_readout.setValue( num( disp ) ); } else { datpan.dp_display_readout.setValue( 0 ) }
 }
 
+# If a button on the navpanel is pressed, run this one.
 var nav_button = func ( key ) {
 	return;
 }
+
+# Used for updating display output when the in/out switch is set to "out".
+# Run this function on startup, also.
+var display_update = func() {
+	#dp-modes go:
+	# 0 - act-pos
+	# 1 - ref/lola
+	# 2 - WP
+	# 3 - wind/route/target
+	# 4 - time
+	# 5 - tact
+	# 6 - id-nr
+	
+	# if the switch is in the "IN" position, exit this function.
+	if ( datpan.inout.getValue() == 0 ) { return; }
+	
+	# we need to display different stuff based on wherever the knob is at.
+	# knob is at act-pos
+	# display alternates between lat and lon - using decimal format here for simplicities sake.
+	if ( datpan.dp_mode.getValue() == 0 ) {
+		if ( int(math.mod(props.globals.getNode("/sim/time/elapsed-sec").getValue(), 2)) == 1 ) {
+			# update longitude on odd seconds
+			datpan.dp_prop_input.setValue( abs(props.globals.getNode("/position/longitude-deg/").getValue()) * 10000 );
+		} else {
+			# update latitude
+			datpan.dp_prop_input.setValue( abs(props.globals.getNode("/position/latitude-deg/").getValue()) * 10000 );
+		}
+		# update every second
+		settimer( func { display_update(); }, 1);
+	#knob is at ref/lola
+	} elsif ( datpan.dp_mode.getValue() == 1 ) {
+	
+	#knob is at WP
+	} elsif ( datpan.dp_mode.getValue() == 2 ) {
+	
+	#knob is at wind/route/target
+	} elsif ( datpan.dp_mode.getValue() == 3 ) {
+	
+	#knob is at time
+	} elsif ( datpan.dp_mode.getValue() == 4 ) {
+	
+	#knob is at tact
+	} elsif ( datpan.dp_mode.getValue() == 5 ) {
+	
+	#knob is at id-nr
+	} elsif ( datpan.dp_mode.getValue() == 6 ) {
+	}
+}
+
+# Clear the datapanel display
+var clear_display = func () {
+	foreach(var datum; datpan.nav.getChildren("dp-display")) { datum.setValue(-1); }
+	datpan.dp_display_pos.setValue(0);
+}
+
+# I feel like this function is hacky, but it works and I can't think of a better way. Nasal's shortcomings seem to be shining through here.
+var readout_listener = func () {
+	clear_display();
+	var display_datum = datpan.dp_prop_input.getValue();
+	var divisor = 1000000;
+	if ( display_datum == 0 ) { return; }
+	#find the top divisor
+	while ( int(display_datum / divisor) == 0 ) {
+		divisor = divisor / 10;
+	}
+	
+	#to set up the exit condition on the below loop correctly, we need to multiply the divisor by 10.
+	divisor = divisor * 10;
+	
+	foreach(var datum; datpan.nav.getChildren("dp-display")) { 
+		divisor = divisor / 10;
+		datum.setValue( int(display_datum / divisor) );
+		display_datum = display_datum - (int(display_datum / divisor) * divisor);
+		if ( divisor == 1 ) { break };
+	}
+	
+	datpan.dp_display_readout.setValue( datpan.dp_prop_input.getValue() );
+}
+
+# setting up and getting things running.
+display_update();
+setlistener(datpan.dp_prop_input, func { readout_listener(); });
+setlistener(datpan.inout, func {
+	if ( datpan.inout.getValue() == 0 ) { 
+		clear_display();
+	} else {
+		readout_listener();
+	}
+});
+
+#if in/out switch is IN
+
+# if act pos
+## do nothing
+
+# if ref/lola
+## entering waypoints. some waypoints are stored in the airplanes memory (still stored as lat/lon)
+## if entering a reference number, it's in the format of 90xx, where X is 1-69. [we could do 9xxx to support up to 999 custom waypoints. hardcode the first 20 though]
+## to enter: put in reference number, then press B1-B9, or BX then 0-9 [we could modify this to BX, ##, BX)
+## for landing bases - 9013 = landing base, 9913 = alternate base. [maybe use 8913 for alternate base? or 99130]
+## if L1 is not specified, LS data is copied to L1.
+## to clear landing bases, enter 9000 and 9900 [us 9000 and 8000, or something]
+## longitudes and latitudes, if entered, need to be between 40 and 90 (latitude) or <40 (longitude) [obv wont work for us, plan to do all coords are okay, down to minutes/seconds]
+## longitude and latitude can be entered in any order [latitude first, because reasons]
+## put in the latitude, press the "B" button or the "L" button (if BX, handle that), followed by longitutde.
+## L2 can't be entered via latitude and longitude.
+
+# if "WP"
+## runway heading is entered via the first four positions [five for us], and last two indicate TILS channel [maybe? need to think about how to implement TILS].
+## press LS or L for storing. runway and TILS can't be entered for L2.
+## to enter "limits", or approach vectors, first three numbers are limit 1, and second three are limit 2. Use 0's to clear out lines.
+
+# if wind/route/goal
+## first three are wind direction, next two are speed in km/h - for forecasted wind.
+## route/goal is weapons related, will fill in later. See the ULTRA SECRET MANUAL!!!!!!1!11!!
+
+# if time
+## format hhmmss
+## press "LS" to set current time
+## press B1-BX to set time expected to be at waypoint
+## cruising mach number, first three positions in the format: 125, which equals 1.25 mach. anything over 399 fails.
+### (not sure what this is supposed to do - maybe counts in with the fuel consumption?)
+## fuel calcs beginat mach 055, and don't go over mach 085
+
+# if takt
+## set bingo fuel with format 51xx, where xx is a percent between 10 and 99.
+## to set targets, see the ULTRA SECRET MANUAL!!!!!!1!11!!
+
+# if ID-NR
+## put assignment and division number, press B1 to store.
+## put yy-mm-dd, then press B2 to store date.
+
+
+
+# if in/out switch is OUT
+
+# if act pos
+## toggle between lat/lon every second [don't include drift as last digit)
+
+# if ref/lola
+## show lat/lon of current waypoint/bp button/landing button.
+
+# if "WP"
+## show lat/lon of L/LS/L1/L2 base and tils channel.
+## if pressed b1-b9,show limits of nav point
+
+# if wind/route/goal
+## show current wind, format direction ddd followed by speed ss. If doppler, last pos is a zero. If forecast, last pos is a [1].
+## MOAR IN DU SECRUT PART
+
+# if time
+## Civvie time displayed if LS
+## Attack timefor target braeakpoint if target breakpoint button pressed
+## if there's a timetable inputted, default to time table error
+## if not, estimated total flight time displayed default
+## if nav breakpoint, cruising mach is displayed.
+## MOAR IN DA SECRUT MANUAL
+
+# if takt
+## checks if breakpoint is a target breakpoint - if it is, displays "900000"
+## if takt/in, then "5100000", then takt/out, shows fuel reserve [is this necessary?]
+## MOARRRRRRRRRRR IN SEECCCRRRUUUUUUUUUT
+
+# if ID-NR
+## press B1 to see assignment and division number
+## press B2 to see date yy-mm-dd
+## more in the secret part.
 
 ############################################################
 ### Radio Navigation
