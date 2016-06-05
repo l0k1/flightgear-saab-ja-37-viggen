@@ -742,7 +742,8 @@
 				<dp-display type="int" n="4">-1</dp-display>
 				<dp-display type="int" n="5">-1</dp-display>
 				<dp-display type="int" n="6">-1</dp-display>
-				<dp-display-pos type="int">0</dp-display-pos>
+				<dp-display-pos type="int">0</dp-display-pos> <!-- where in the display we are updating next -->
+				<np-last-pressed type="int">-1</np-last-pressed> <!-- the last button pressed on the navpanel. -1 is "no button". -->
 			</navigation>
         </ja37>
         <replay>

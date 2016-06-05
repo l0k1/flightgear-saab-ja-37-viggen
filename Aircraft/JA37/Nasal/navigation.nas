@@ -21,16 +21,17 @@
 
 
 datpan = {
-	nav:				"/sim/ja37/navigation",
-	dp_mode:			"/sim/ja37/navigation/dp-mode",
-	dp_display:			"/sim/ja37/navigation/dp-display",
-	dp_display_pos:		"/sim/ja37/navigation/dp-display-pos",
-	dp_display_readout:	"/sim/ja37/navigation/dp-display-readout",
-	inout:				"/sim/ja37/navigation/inout",
-	ispos:				"/sim/ja37/navigation/ispos",
-	tils_knob:			"/sim/ja37/navigation/tils-knob",
-	tils_group:  		"/sim/ja37/navigation/tils-group",
-	dp_prop_input:		"/sim/ja37/navigation/dp-display-input",
+	nav:					"/sim/ja37/navigation",
+	dp_mode:				"/sim/ja37/navigation/dp-mode",
+	dp_display:				"/sim/ja37/navigation/dp-display",
+	dp_display_pos:			"/sim/ja37/navigation/dp-display-pos",
+	dp_display_readout:		"/sim/ja37/navigation/dp-display-readout",
+	inout:					"/sim/ja37/navigation/inout",
+	ispos:					"/sim/ja37/navigation/ispos",
+	tils_knob:				"/sim/ja37/navigation/tils-knob",
+	tils_group:  			"/sim/ja37/navigation/tils-group",
+	dp_prop_input:			"/sim/ja37/navigation/dp-display-input",
+	np_last_pressed:		"/sim/ja37/navigation/np-last-pressed",
 };
 
 foreach(var name; keys(datpan)) {
@@ -64,25 +65,16 @@ var data_display = func ( key ) {
 
 # If a button on the navpanel is pressed, run this one.
 var nav_button = func ( key ) {
-	return;
+	datpan.np_last_pressed.setValue(key);
 }
 
 # Used for updating display output when the in/out switch is set to "out".
 # Run this function on startup, also.
 var display_update = func() {
-	#dp-modes go:
-	# 0 - act-pos
-	# 1 - ref/lola
-	# 2 - WP
-	# 3 - wind/route/target
-	# 4 - time
-	# 5 - tact
-	# 6 - id-nr
 	
 	# if the switch is in the "IN" position, exit this function.
 	if ( datpan.inout.getValue() == 0 ) { return; }
 	
-	# we need to display different stuff based on wherever the knob is at.
 	# knob is at act-pos
 	# display alternates between lat and lon - using decimal format here for simplicities sake.
 	if ( datpan.dp_mode.getValue() == 0 ) {
@@ -95,10 +87,35 @@ var display_update = func() {
 		}
 		# update every second
 		settimer( func { display_update(); }, 1);
-	#knob is at ref/lola
+		
+	# knob is at ref/lola
+	# show lat/lon of current waypoint/bp button/landing button.
 	} elsif ( datpan.dp_mode.getValue() == 1 ) {
+
+		# find which waypoint we need to display.
+		if ( props.globals.getNode("/autopilot/route-manager/active").getValue() == 1 ) {
+			if ( datpan.np_last_pressed.getValue() == -1 or props.globals.getNode("/autopilot/route-manager/route/wp["~datpan.np_last_pressed~"]") == nil ) {
+				var current_wp = props.globals.getNode("autopilot/route-manager/current-wp").getValue();
+			} else {
+				var current_wp = datpan.np_last_pressed.getValue();
+			}
+			
+			if ( int(math.mod(props.globals.getNode("/sim/time/elapsed-sec").getValue(), 2)) == 1 ) {
+				# update longitude on odd seconds
+				datpan.dp_prop_input.setValue( abs(props.globals.getNode("/autopilot/route-manager/route/wp["~current_wp~"]/longitude-deg").getValue()) * 10000 );
+			} else {
+				# update latitude
+				datpan.dp_prop_input.setValue( abs(props.globals.getNode("/autopilot/route-manager/route/wp["~current_wp~"]/latitude-deg").getValue()) * 10000 );
+			}
+		} else {
+			clear_display();
+		}
+		# update every second
+		settimer( func { display_update(); }, 1);
 	
 	#knob is at WP
+	## show lat/lon of L/LS/L1/L2 base and tils channel.
+	## if pressed b1-b9,show limits of nav point
 	} elsif ( datpan.dp_mode.getValue() == 2 ) {
 	
 	#knob is at wind/route/target
@@ -145,16 +162,29 @@ var readout_listener = func () {
 	datpan.dp_display_readout.setValue( datpan.dp_prop_input.getValue() );
 }
 
-# setting up and getting things running.
-display_update();
+# display input property listener
 setlistener(datpan.dp_prop_input, func { readout_listener(); });
+
+# in/out switch listener
 setlistener(datpan.inout, func {
+	# if switch is set to IN
 	if ( datpan.inout.getValue() == 0 ) { 
 		clear_display();
+	# if switch is set to OUT
 	} else {
 		readout_listener();
 	}
 });
+
+# knob listener
+setlistener(datpan.dp_mode, func {
+	if ( datpan.dp_mode.getValue() == 1 and datpan.inout == 1 ) {
+		datpan.np_last_pressed.setValue(-1);
+	}
+});
+		
+# setting up and getting things running.
+display_update();
 
 #if in/out switch is IN
 
