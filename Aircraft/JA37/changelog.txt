@@ -2239,3 +2239,74 @@ GUI: Added the new keybindings for radio navigation to the help description.
 HUD: Fixed that the routemanager in rare case could crash the HUD.
 Sim: Removed missile over MP capability, due to it breaking the MP packet size.
 HUD: Distancescale will now show distance to waypoint if no DME is available.
+Sim: Made cannon only try to defeat spam filter when MP msg. is on.
+Model: Made Stick indicator go off if any of the control surfaces is damaged.
+GUI: Key 'Q' now resets the view direction and zoom.
+Model: {Pinto} Fixed small irregularity in droptankNoshader, and re-aligned droptank
+Model: {Pinto} Fixed small gap between droptankNoshader and droptank.
+Model: {Pinto} Fixing center pylon to be symmetrical.
+Model: {Pinto} Modeled the actual bottom airinlet.
+Model: {Pinto} Fixed the center pylon shape and position.
+Model: {Pinto} Modeled the gunpod. (It is detachable in case the model should be reused for a AJ-37)
+Model: {Pinto} Adjusted position of drop-tank to proper attach it to the pylon.
+Sim: The cannon now fires from the new gunpod.
+Model: The glass infront of the radar screen no longer has a texture.
+Model: {Pinto} Made the the little JA37 vertical fin on top of outlet.
+Model: {Pinto} Moved the backup pitot tube lower on the vertical tail.
+Model: {Pinto} Updated the UV map for the above mentioned move.
+Model: {Pinto} Optimized main model by 2000 faces.
+Model: {Pinto} Fixed that the front left wheel hub was going outwards.
+Sim: Added Pinto to main authors list.
+Model: {Pinto} Made many objects including fuselage single-sided geometry.
+Model: {Pinto} Moved bottom beacon and top strobe lights to better positions.
+Model: {Pinto} Fixed fins on droptank to have volume so ubershader can be applied on them.
+Model: {Pinto} Merged droptank into one object.
+Model: {Pinto} Fixed gaps between outer windshield and frame.
+Model: {Pinto} Further optimized faces that are not seen, by deletion.
+Engine: Adjusted output.
+Aero: Adjusted wave drag.
+Aero: Began splitting jsbsim files up in preparation for AJ37.
+Sim: Started making performance document for AJ37.
+Engine: Started making engine for AJ37.
+Aero: Changed the fuel capacity relative contents.
+Aero: Moved CoG and Neutral point 15 cm back.
+Aero: Added wave drag to droptank.
+Sim: Renamed performance files.
+Aero: Adjusted wave drag for high altitude.
+Sim: Started refactoring set file into base and specific for variant.
+Sim: Renamed jsbsim main file.
+Model: {Pinto} Better M70 model.
+Engine: Fixed that the AJ engine would not start up.
+Sim: Made shared model file for vaiants.
+Sim: More work in making shared model file.
+Engine: Switched fuel type to F-40.
+AJ37: Engine: Moved collector tank to be on top of CoG.
+GUI: Made splash screen for AJ37.
+GUI: Moved splashcreens into own folder.
+GUI: Changed welcome message on screen and in console to the variant type.
+Aero: Refactored some more JSBSim code.
+Model: {Pinto} Made a AJ37 model.
+Model: Some work to apply livery and animations and loading of model differ on variant.
+Model: {Pinto} Fixed that the models would not load correctly.
+Sim: Disabled cannon in the AJ37.
+Sim: Decreased radar range for AJ37 to 120 Km.
+Sim: Added the RB-24 missile to the AJ37.
+Sim: Removed RB-74, RB-71 and RB-99 from AJ37 loadout.
+Sim: Removed the RB15F from JA loadout options.
+Sim: Put rb74 back into the AJ37.
+Sim: Added stats in the AJ37 for M90, RB-75, RB-04 and RB-05.
+Sim: Changed RB-71 fire message to Fox 1.
+Sim: Missiles will now output max speed with 1 more decimal.
+HUD: KCA weapon renamed to AKAN.
+Radar: Geo targets now acts as if painted, as the computer is aware of its position all the time.
+Sim: Changed weight of M70 to 794 lbm.
+Sim: Added actual loadout for AJ37. 4/6 is functional.
+Sim: Renamed all the armament loadout options.
+Model: {Pinto} Modelled and textured RB04E anti-ship missile.
+Model: {Pinto} Modelled and textured RB05A vision guided a2g missile.
+Model: {Pinto} Modelled and textured RB75 Maverick vision guided fire-and-forget a2g missile
+Model: {Pinto} Modelled and textured M55 AKAN gunpod.
+Model: {Pinto} Modelled and textured M71 rail and bomblets.
+Model: {Pinto} Modelled and textured M90 'Mjolner' cluster glide-bomb.
+Model: {Pinto} Attached the new armement to the AJ37.
+Model: Canopy now opens more.

@@ -424,6 +424,10 @@ var update_loop = func {
 	    input.rmBearingRel.setDoubleValue(input.rmBearing.getValue() - input.headingMagn.getValue());
       
     }
+
+    if(getprop("sim/description") != "Saab JA-37 Viggen" and getprop("/instrumentation/radar/range") == 180000) {
+      setprop("/instrumentation/radar/range", 120000);
+    }
 	
     settimer(
       #func debug.benchmark("j37 loop", 
@@ -986,7 +990,7 @@ var test_support = func {
 
   print();
   print("***************************************************************");
-  print("**         Initializing Saab JA-37 Viggen systems.           **");
+  print("**         Initializing "~getprop("sim/description")~" systems.           **");
   print("**           Version "~getprop("sim/aircraft-version")~" on Flightgear "~version[0]~"."~version[1]~"."~version[2]~"            **");
   print("***************************************************************");
   print();
@@ -1047,7 +1051,7 @@ var main_init = func {
       input[name] = props.globals.getNode(input[name], 1);
   }
 
-  screen.log.write("Welcome to Saab JA-37 Viggen, version "~getprop("sim/aircraft-version"), 1.0, 0.2, 0.2);
+  screen.log.write("Welcome to "~getprop("sim/description")~", version "~getprop("sim/aircraft-version"), 1.0, 0.2, 0.2);
 
   # init cockpit temperature
   setprop("environment/aircraft-effects/temperature-inside-degC", getprop("environment/temperature-degc"));
@@ -1794,4 +1798,11 @@ var loadSysFail = func () {
 
 var loadIFail = func () {
   ct("ifa");fgcommand("dialog-show", props.Node.new({"dialog-name":"instrument-failures"}));
+}
+
+var resetView = func () {
+  setprop("sim/current-view/field-of-view", getprop("sim/current-view/config/default-field-of-view-deg"));
+  setprop("sim/current-view/heading-offset-deg", getprop("sim/current-view/config/heading-offset-deg"));
+  setprop("sim/current-view/pitch-offset-deg", getprop("sim/current-view/config/pitch-offset-deg"));
+  setprop("sim/current-view/roll-offset-deg", getprop("sim/current-view/config/roll-offset-deg"));
 }

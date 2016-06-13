@@ -1,8 +1,149 @@
 <?xml version="1.0"?>
 
-<PropertyList><!-- include="ja37-bombable.xml">       -->
+<PropertyList>
 
-  <path>ja37.ac</path>
+	<path>ja37.ac</path>
+
+	<effect>
+	    <inherits-from>Aircraft/JA37/Models/Effects/ja37-combined-shader</inherits-from>
+	    <!--<inherits-from>Aircraft/JA37/Models/Effects/shadow/interior-shadow</inherits-from>-->
+	    <object-name>ja37fin</object-name>
+		<object-name>ja37dropTank</object-name>
+		<object-name>ja37upperPitotTube</object-name>
+		<object-name>ja37upperVerticalStabilizer</object-name>
+	</effect>
+
+	<!-- ====== drop tank ====== -->
+
+	<animation>
+	  <object-name>ja37dropTank</object-name>
+	  <type>select</type>
+	  <condition>
+	   <equals>
+	    <property>sim/multiplay/generic/int[16]</property><!-- consumables/fuel/tank[8]/jettisoned -->
+	    <value>0</value>
+	   </equals>
+	  </condition>
+	</animation>
+
+	<!-- strobe light -->
+
+	<animation>
+	  	<type>material</type>
+	  	<object-name>ja37strobe</object-name>
+	  	<condition>
+		    <or><!-- flash: bit 1 -->
+				<equals>
+					<property>sim/multiplay/generic/int[9]</property>
+					<value>1</value>
+				</equals>
+				<equals>
+					<property>sim/multiplay/generic/int[9]</property>
+					<value>3</value>
+				</equals>
+				<equals>
+					<property>sim/multiplay/generic/int[9]</property>
+					<value>5</value>
+				</equals>            
+				<equals>
+					<property>sim/multiplay/generic/int[9]</property>
+					<value>7</value>
+				</equals>       
+		    </or>
+	  	</condition>
+	  	<emission>
+	   		<red>1.0</red>
+			<green>1.0</green>
+	   		<blue>1.0</blue>
+	   		<factor-prop>sim/multiplay/generic/int[5]</factor-prop><!-- sim/model/lighting/strobe/state -->
+	  	</emission>
+	</animation>
+
+	<model>
+		<name>strobeFlash</name>
+		<path>Aircraft/JA37/Models/Effects/strobe.xml</path>
+		<condition>
+			<or><!-- flash: bit 1 -->
+			  <equals>
+			    <property>sim/multiplay/generic/int[9]</property>
+			    <value>1</value>
+			  </equals>
+			  <equals>
+			    <property>sim/multiplay/generic/int[9]</property>
+			    <value>3</value>
+			  </equals>
+			  <equals>
+			    <property>sim/multiplay/generic/int[9]</property>
+			    <value>5</value>
+			  </equals>
+			  <equals>
+			    <property>sim/multiplay/generic/int[9]</property>
+			    <value>7</value>
+			  </equals>
+			</or>
+		</condition>
+		<offsets>
+			<x-m>6.06013</x-m>
+			<y-m>0.0</y-m>
+			<z-m>3.56179</z-m>
+		</offsets>
+	</model>
+
+	<!-- livery selection -->
+
+	<animation>
+		<type>material</type>
+		<object-name>canopy</object-name>
+		<object-name>elevonLeftInner</object-name>
+		<object-name>elevonLeftOuter</object-name>
+		<object-name>elevonRightInner</object-name>
+		<object-name>elevonRightOuter</object-name>
+		<object-name>flaps</object-name>
+		<object-name>fuselage</object-name>
+		<object-name>wingLeft</object-name>
+		<object-name>wingRight</object-name>
+		<object-name>rudder</object-name>
+		<object-name>gearFrontDoorsOpenLeft</object-name>
+		<object-name>gearFrontDoorsOpenRight</object-name>
+		<object-name>gearFrontDoorsClosed</object-name>
+		<object-name>gearLeftDoorsOpen</object-name>
+		<object-name>gearLeftDoorsClosed</object-name>
+		<object-name>gearRightDoorsOpen</object-name>
+		<object-name>gearRightDoorsClosed</object-name>
+		<object-name>gunpod</object-name>
+		<object-name>bottomAirInlet</object-name>
+		<!--<object-name>gearFront</object-name>
+		<object-name>gearFrontHinge</object-name>
+		<object-name>missile</object-name>
+		<object-name>missile1</object-name>
+		<object-name>missile2</object-name>
+		<object-name>missile3</object-name>
+		<object-name>gearLeft</object-name>
+		<object-name>gearLeftHinge</object-name>
+		<object-name>wheelRight1</object-name>
+		<object-name>wheelRight2</object-name>
+		<object-name>wheelLeft1</object-name>
+		<object-name>wheelLeft2</object-name>
+		<object-name>gearRight</object-name>
+		<object-name>gearRightHinge</object-name>-->
+		<object-name>ja37fin</object-name>
+		<object-name>ja37dropTank</object-name>
+		<object-name>ja37upperPitotTube</object-name>
+		<object-name>ja37upperVerticalStabilizer</object-name>
+		<property-base>sim/model/livery</property-base>
+		<texture-prop>texture</texture-prop>
+		<texture>Aircraft/JA37/Models/j37_texture.png</texture>
+	</animation>
+
+<!--
+	***********************************************************************************
+	***********************************************************************************
+	*                         Common part between the variants below here             *
+	***********************************************************************************
+	***********************************************************************************
+-->
+
+<!-- include="ja37-bombable.xml">       -->
 
   <!-- Multiplay sound -->
   <!--<sound>
@@ -217,8 +358,6 @@
     <object-name>gearRightHinge</object-name>
     <object-name>gearRightDoorsOpen</object-name>
     <object-name>gearRightDoorsClosed</object-name>
-    <object-name>dropTank</object-name>
-    <!--<object-name>dropTankNoshader</object-name> as long as the fins has no thickness ubershader cannot be applied to them --> 
   </effect>
 
   <effect>
@@ -390,7 +529,7 @@
   <object-name>mirrorholder</object-name>
   <object-name>mirrorreflect</object-name>
   <property>canopy/position-norm</property><!-- auto MP transmit -->
-  <factor>30.0</factor>
+  <factor>55.0</factor>
   <center>
    <x-m>-2.67098</x-m>
    <y-m>0.000003</y-m>
@@ -2503,69 +2642,6 @@
   </emission>
  </animation>
 
-<!-- strobe light -->
-
- <model>
-  <name>strobeFlash</name>
-  <path>Aircraft/JA37/Models/Effects/strobe.xml</path>
-  <condition>
-    <or><!-- flash: bit 1 -->
-      <equals>
-        <property>sim/multiplay/generic/int[9]</property>
-        <value>1</value>
-      </equals>
-      <equals>
-        <property>sim/multiplay/generic/int[9]</property>
-        <value>3</value>
-      </equals>
-      <equals>
-        <property>sim/multiplay/generic/int[9]</property>
-        <value>5</value>
-      </equals>            
-      <equals>
-        <property>sim/multiplay/generic/int[9]</property>
-        <value>7</value>
-      </equals>       
-    </or>
-  </condition>
-  <offsets>
-   <x-m>5.95508</x-m>
-   <y-m>0.0</y-m>
-   <z-m>3.42411</z-m>
-  </offsets>
- </model>
-
-<animation>
-  <type>material</type>
-  <object-name>strobe</object-name>
-  <condition>
-    <or><!-- flash: bit 1 -->
-      <equals>
-        <property>sim/multiplay/generic/int[9]</property>
-        <value>1</value>
-      </equals>
-      <equals>
-        <property>sim/multiplay/generic/int[9]</property>
-        <value>3</value>
-      </equals>
-      <equals>
-        <property>sim/multiplay/generic/int[9]</property>
-        <value>5</value>
-      </equals>            
-      <equals>
-        <property>sim/multiplay/generic/int[9]</property>
-        <value>7</value>
-      </equals>       
-    </or>
-  </condition>
-  <emission>
-   <red>1.0</red>
-   <green>1.0</green>
-   <blue>1.0</blue>
-   <factor-prop>sim/multiplay/generic/int[5]</factor-prop><!-- sim/model/lighting/strobe/state -->
-  </emission>
- </animation>
-
 <!-- landing light -->
 
 <animation>
@@ -2707,20 +2783,6 @@
 
 <!-- ===================== start payload =========================== -->
 
-<!-- ====== drop pod ====== -->
-
-<animation>
-  <object-name>dropTank</object-name>
-  <object-name>dropTankNoshader</object-name>
-  <type>select</type>
-  <condition>
-   <equals>
-    <property>sim/multiplay/generic/int[16]</property><!-- consumables/fuel/tank[8]/jettisoned -->
-    <value>0</value>
-   </equals>
-  </condition>
- </animation>
-
 <!-- ====== rb 24j/74 ====== -->
  
 <animation>
@@ -2736,6 +2798,10 @@
       <equals>
         <property>sim/multiplay/generic/float[11]</property><!-- payload/weight[0]/weight-lb -->
         <value>179</value>
+      </equals>
+      <equals>
+        <property>sim/multiplay/generic/float[11]</property><!-- payload/weight[0]/weight-lb -->
+        <value>160.94</value>
       </equals>
     </or>
   </condition>
@@ -2753,6 +2819,10 @@
       <equals>
         <property>sim/multiplay/generic/float[12]</property><!-- payload/weight[1]/weight-lb -->
         <value>179</value>
+      </equals>
+      <equals>
+        <property>sim/multiplay/generic/float[11]</property><!-- payload/weight[0]/weight-lb -->
+        <value>160.94</value>
       </equals>
     </or>
   </condition>
@@ -2772,6 +2842,10 @@
         <property>sim/multiplay/generic/float[13]</property><!-- payload/weight[2]/weight-lb -->
         <value>179</value>
       </equals>
+      <equals>
+        <property>sim/multiplay/generic/float[11]</property><!-- payload/weight[0]/weight-lb -->
+        <value>160.94</value>
+      </equals>
     </or>
   </condition>
  </animation>
@@ -2788,6 +2862,10 @@
       <equals>
         <property>sim/multiplay/generic/float[14]</property><!-- payload/weight[3]/weight-lb -->
         <value>179</value>
+      </equals>
+      <equals>
+        <property>sim/multiplay/generic/float[11]</property><!-- payload/weight[0]/weight-lb -->
+        <value>160.94</value>
       </equals>
     </or>
   </condition>
@@ -3168,48 +3246,6 @@
   <max-m>15</max-m>
  </animation>-->
 
-<!-- livery selection -->
-
-<animation>
-  <type>material</type>
-  <object-name>canopy</object-name>
-  <object-name>dropTank</object-name>
-  <object-name>dropTankNoshader</object-name>
-  <object-name>elevonLeftInner</object-name>
-  <object-name>elevonLeftOuter</object-name>
-  <object-name>elevonRightInner</object-name>
-  <object-name>elevonRightOuter</object-name>
-  <object-name>flaps</object-name>
-  <object-name>fuselage</object-name>
-  <object-name>wingLeft</object-name>
-  <object-name>wingRight</object-name>
-<!--  <object-name>missile</object-name>
-  <object-name>missile1</object-name>
-  <object-name>missile2</object-name>
-  <object-name>missile3</object-name>-->
-  <object-name>rudder</object-name>
-  <!--<object-name>gearFront</object-name>
-  <object-name>gearFrontHinge</object-name>-->
-  <object-name>gearFrontDoorsOpenLeft</object-name>
-  <object-name>gearFrontDoorsOpenRight</object-name>
-  <object-name>gearFrontDoorsClosed</object-name>
-  <!--<object-name>gearLeft</object-name>
-  <object-name>gearLeftHinge</object-name>-->
-  <object-name>gearLeftDoorsOpen</object-name>
-  <object-name>gearLeftDoorsClosed</object-name>
-  <!--  <object-name>wheelRight1</object-name>
-  <object-name>wheelRight2</object-name>
-  <object-name>wheelLeft1</object-name>
-  <object-name>wheelLeft2</object-name>
-  <object-name>gearRight</object-name>
-  <object-name>gearRightHinge</object-name>-->
-  <object-name>gearRightDoorsOpen</object-name>
-  <object-name>gearRightDoorsClosed</object-name>
-  <property-base>sim/model/livery</property-base>
-  <texture-prop>texture</texture-prop>
-  <texture>Aircraft/JA37/Models/j37_texture.png</texture>
- </animation>
-
 
  <!--<animation>
   <type>material</type>
@@ -3223,5 +3259,6 @@
   </condition>
   <shininess>96</shininess>
 </animation>-->
+
 
 </PropertyList>

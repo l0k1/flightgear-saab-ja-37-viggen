@@ -2,7 +2,7 @@
 
 
 <!-- **********************************************************************
-        AERODYNAMICS OF JA-37
+        AERODYNAMICS OF Saab 37 Viggen
 
         Page references are given to pdf: http://hdl.handle.net/2060/19860019453
 
@@ -342,11 +342,11 @@
                     <tableData><!--  1.25   2.2   mach, aug   -->
                                   0.0    36089.2
                         0.8100    0.00     0.00
-                        1.0000    0.10     0.0629
-                        1.1250    0.0825   0.0629
-                        1.2500    0.07     0.0629
-                        1.5000    0.05     0.0629
-                        2.0000    0.03     0.0629
+                        1.0000    0.10     0.0588
+                        1.1250    0.0825   0.0588
+                        1.2500    0.07     0.0588
+                        1.5000    0.05     0.0588
+                        2.0000    0.03     0.0588
                     </tableData>
                 </table>
                 <property>aero/factor-axial-mach</property>
@@ -708,12 +708,18 @@
                     <tableData>
                         <!--     10 means same as drop-tank -->
                          0       0
-                         179     1
-                         188     1
-                         200     4
-                         291     2.0
-                         425     2.2
-                         1763.7  6
+                         160.94  1   <!-- rb24  -->
+                         179     1   <!-- rb24j -->
+                         188     1   <!-- rb74  -->
+                         291     2.0 <!-- rb99  -->
+                         425     2.2 <!-- rb71  -->
+                         672.4   2.0 <!-- rb05a -->
+                         794     4   <!-- m70   -->
+                         802.5   2.5 <!-- m55   -->
+                         1060    2   <!-- m71   -->
+                         1322.77 4   <!-- m90   -->
+                         1378    3   <!-- rb04e -->
+                         1763.7  6   <!-- rb15f -->
                     </tableData>
                 </table>
                 <property>aero/function/stores-wave-drag-factor</property>
@@ -737,12 +743,18 @@
                     <independentVar lookup="row">inertia/pointmass-weight-lbs[2]</independentVar>
                     <tableData>
                          0       0
-                         179     1
-                         188     1
-                         200     4
-                         291     2.0
-                         425     2.2
-                         1763.7  6
+                         160.94  1   <!-- rb24  -->
+                         179     1   <!-- rb24j -->
+                         188     1   <!-- rb74  -->
+                         291     2.0 <!-- rb99  -->
+                         425     2.2 <!-- rb71  -->
+                         672.4   2.0 <!-- rb05a -->
+                         794     4   <!-- m70   -->
+                         802.5   2.5 <!-- m55   -->
+                         1060    2   <!-- m71   -->
+                         1322.77 4   <!-- m90   -->
+                         1378    3   <!-- rb04e -->
+                         1763.7  6   <!-- rb15f -->
                     </tableData>
                 </table>
                 <property>aero/function/stores-wave-drag-factor</property>
@@ -766,12 +778,18 @@
                     <independentVar lookup="row">inertia/pointmass-weight-lbs[3]</independentVar>
                     <tableData>
                          0       0
-                         179     1
-                         188     1
-                         200     4
-                         291     2.0
-                         425     2.2
-                         1763.7  6
+                         160.94  1   <!-- rb24  -->
+                         179     1   <!-- rb24j -->
+                         188     1   <!-- rb74  -->
+                         291     2.0 <!-- rb99  -->
+                         425     2.2 <!-- rb71  -->
+                         672.4   2.0 <!-- rb05a -->
+                         794     4   <!-- m70   -->
+                         802.5   2.5 <!-- m55   -->
+                         1060    2   <!-- m71   -->
+                         1322.77 4   <!-- m90   -->
+                         1378    3   <!-- rb04e -->
+                         1763.7  6   <!-- rb15f -->
                     </tableData>
                 </table>
                 <property>aero/function/stores-wave-drag-factor</property>
@@ -795,12 +813,18 @@
                     <independentVar lookup="row">inertia/pointmass-weight-lbs[4]</independentVar>
                     <tableData>
                          0       0
-                         179     1
-                         188     1
-                         200     4
-                         291     2.0
-                         425     2.2
-                         1763.7  6
+                         160.94  1   <!-- rb24  -->
+                         179     1   <!-- rb24j -->
+                         188     1   <!-- rb74  -->
+                         291     2.0 <!-- rb99  -->
+                         425     2.2 <!-- rb71  -->
+                         672.4   2.0 <!-- rb05a -->
+                         794     4   <!-- m70   -->
+                         802.5   2.5 <!-- m55   -->
+                         1060    2   <!-- m71   -->
+                         1322.77 4   <!-- m90   -->
+                         1378    3   <!-- rb04e -->
+                         1763.7  6   <!-- rb15f -->
                     </tableData>
                 </table>
                 <property>aero/function/stores-wave-drag-factor</property>
@@ -824,8 +848,18 @@
                     <independentVar lookup="row">inertia/pointmass-weight-lbs[5]</independentVar>
                     <tableData>
                          0       0
-                         179     1
-                         188     1
+                         160.94  1   <!-- rb24  -->
+                         179     1   <!-- rb24j -->
+                         188     1   <!-- rb74  -->
+                         291     2.0 <!-- rb99  -->
+                         425     2.2 <!-- rb71  -->
+                         672.4   2.0 <!-- rb05a -->
+                         794     4   <!-- m70   -->
+                         802.5   2.5 <!-- m55   -->
+                         1060    2   <!-- m71   -->
+                         1322.77 4   <!-- m90   -->
+                         1378    3   <!-- rb04e -->
+                         1763.7  6   <!-- rb15f -->
                     </tableData>
                 </table>
                 <property>aero/function/stores-wave-drag-factor</property>
@@ -849,8 +883,18 @@
                     <independentVar lookup="row">inertia/pointmass-weight-lbs[6]</independentVar>
                     <tableData>
                          0       0
-                         179     1
-                         188     1
+                         160.94  1   <!-- rb24  -->
+                         179     1   <!-- rb24j -->
+                         188     1   <!-- rb74  -->
+                         291     2.0 <!-- rb99  -->
+                         425     2.2 <!-- rb71  -->
+                         672.4   2.0 <!-- rb05a -->
+                         794     4   <!-- m70   -->
+                         802.5   2.5 <!-- m55   -->
+                         1060    2   <!-- m71   -->
+                         1322.77 4   <!-- m90   -->
+                         1378    3   <!-- rb04e -->
+                         1763.7  6   <!-- rb15f -->
                     </tableData>
                 </table>
                 <property>aero/function/stores-wave-drag-factor</property>
@@ -865,9 +909,9 @@
             <product>
                 <property>aero/qbar-psf</property>
                 <property>metrics/Sw-sqft</property>
-                <!--<property>aero/function/mach-effect-prefactor</property>-->
                 <difference>
                     <product>
+                        <property>aero/function/stores-wave-drag-factor</property>
                         <table>
                             <independentVar lookup="row"> aero/alpha-deg </independentVar>
                             <tableData>

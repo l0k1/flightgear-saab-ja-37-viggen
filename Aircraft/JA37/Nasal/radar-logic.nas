@@ -6,7 +6,7 @@ var rad2deg = 180.0/math.pi;
 var kts2kmh = 1.852;
 var feet2meter = 0.3048;
 
-var radarRange = 180000;#meter, is estimate. The AJ-37 has 120KM and JA37 is almost 10 years newer, so is reasonable I think.
+var radarRange = getprop("sim/description") == "Saab JA-37 Viggen"?180000:120000;#meter, is estimate. The AJ-37 has 120KM and JA37 is almost 10 years newer, so is reasonable I think.
 
 var self = nil;
 var myAlt = nil;
@@ -67,6 +67,10 @@ var findRadarTracks = func () {
     var rb74 = input.ai_models.getChildren("rb-74");
     var rb99 = input.ai_models.getChildren("rb-99");
     var rb15 = input.ai_models.getChildren("rb-15f");
+    var rb04 = input.ai_models.getChildren("rb-04e");
+    var rb05 = input.ai_models.getChildren("rb-05a");
+    var rb75 = input.ai_models.getChildren("rb-75");
+    var m90 = input.ai_models.getChildren("m90");
     var test = input.ai_models.getChildren("test");
     if(selection != nil and selection.isValid() == FALSE) {
       #print("not valid");
@@ -87,6 +91,10 @@ var findRadarTracks = func () {
     processTracks(rb74, FALSE, TRUE, FALSE, ORDNANCE);
     processTracks(rb99, FALSE, TRUE, FALSE, ORDNANCE);
     processTracks(rb15, FALSE, TRUE, FALSE, ORDNANCE);
+    processTracks(rb04, FALSE, TRUE, FALSE, ORDNANCE);
+    processTracks(rb05, FALSE, TRUE, FALSE, ORDNANCE);
+    processTracks(rb75, FALSE, TRUE, FALSE, ORDNANCE);
+    processTracks(m90, FALSE, TRUE, FALSE, ORDNANCE);
     processTracks(test, FALSE, TRUE, FALSE, ORDNANCE);
     processCallsigns(players);
 
@@ -1001,7 +1009,7 @@ var ContactGPS = {
   },
 
   isPainted: func () {
-    return FALSE;
+    return TRUE;
   },
 
   getUnique: func () {

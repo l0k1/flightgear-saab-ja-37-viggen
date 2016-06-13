@@ -35,7 +35,7 @@
     </key>
     <key>
         <name>CTRL-1..4 and CTRL-6..7</name>
-        <desc>Select missiles</desc>
+        <desc>Select pylon</desc>
     </key>
 	<key>
         <name>[ / ]</name>
@@ -132,6 +132,10 @@
     <key>
         <name>Ctrl Shift a</name>
         <desc>Continue on current heading, speed and altitude with A/P</desc>
+    </key>
+    <key>
+        <name>Q</name>
+        <desc>Reset view</desc>
     </key>
     <!--<key>  as the real Viggen does not have carrier capacity, these functions are not officially documented. It works though.
       <name>L</name>
