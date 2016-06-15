@@ -8,7 +8,7 @@
    <lighting type="bool">false</lighting>
 
    <condition>
-         <property>payload/armament/rb-15f/flags/explode-id-2</property>
+         <property>payload/armament/rb-75/flags/explode-id-2</property>
    </condition>
 
    <attach>world</attach>
@@ -66,7 +66,7 @@
          <alpha><value> 0.1 </value></alpha>
        </color>
        <size>
-         <value>200</value>
+         <value>100</value>
        </size>
      </end>
 
@@ -94,7 +94,7 @@
    <lighting type="bool">false</lighting>
 
    <condition>
-         <property>payload/armament/rb-15f/flags/explode-smoke-id-2</property>
+         <property>payload/armament/rb-75/flags/explode-smoke-id-2</property>
    </condition>
 
    <attach>world</attach>
@@ -152,7 +152,7 @@
          <alpha><value> 0.04 </value></alpha>
        </color>
        <size>
-         <value>240</value>
+         <value>120</value>
        </size>
      </end>
 

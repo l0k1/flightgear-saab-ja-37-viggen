@@ -161,10 +161,31 @@
                         </binding>
                     </item>-->
                     <item>
-                        <label>Reload air to ground</label>
+                        <label>Reload air to armour</label>
                         <binding>
                             <command>nasal</command>
-                            <script>armament.reloadAJAir2Ground();</script>
+                            <script>armament.reloadAJAir2Tank();</script>
+                        </binding>
+                    </item>
+                    <item>
+                        <label>Reload air to ship</label>
+                        <binding>
+                            <command>nasal</command>
+                            <script>armament.reloadAJAir2Ship();</script>
+                        </binding>
+                    </item>
+                    <item>
+                        <label>Reload air to personel</label>
+                        <binding>
+                            <command>nasal</command>
+                            <script>armament.reloadAJAir2Personel();</script>
+                        </binding>
+                    </item>
+                    <item>
+                        <label>Reload air to air (1987)</label>
+                        <binding>
+                            <command>nasal</command>
+                            <script>armament.reloadAJAir2Air();</script>
                         </binding>
                     </item>
                     <item>
@@ -454,6 +475,39 @@
                 <name>Drop tank</name>
                 <lbs>224.87</lbs>
             </opt>
+            <opt>
+                <name>RB 04E Attackrobot</name>
+                <lbs>1378</lbs>
+            </opt>            
+            <opt>
+                <name>RB 05A Attackrobot</name>
+                <lbs>672.4</lbs>
+            </opt>
+            <opt>
+                <name>RB 15F Attackrobot</name>
+                <lbs>1763.7</lbs>
+            </opt>
+            <!-- not enough room for this
+            <opt>
+                <name>RB 75 Maverick</name>
+                <lbs>462</lbs>
+            </opt>-->
+            <opt>
+                <name>M55 AKAN</name>
+                <lbs>802.5</lbs>
+            </opt>
+            <opt>
+                <name>M70 ARAK</name>
+                <lbs>794</lbs>
+            </opt>
+            <opt>
+                <name>M71 Bomblavett</name>
+                <lbs>1060</lbs>
+            </opt>
+            <opt>
+                <name>M90 Bombkapsel</name>
+                <lbs>1322.77</lbs>
+            </opt>
         </weight>
         <armament>
                 <models type="string">Aircraft/JA37/Models/Armament/Weapons/</models>
@@ -690,9 +744,9 @@
                     <vol-search type="double">0.00</vol-search>
                     <vol-track type="double">0.15</vol-track>
                     <vol-track-weak type="double">0.1</vol-track-weak>
-                    <guidance type="string">radar</guidance>                        <!-- source -->
+                    <guidance type="string">radar</guidance>                             <!-- source -->
                     <all-aspect type="bool">true</all-aspect>
-                    <max-fire-range-nm type="double">12</max-fire-range-nm>            <!-- source -->
+                    <max-fire-range-nm type="double">12</max-fire-range-nm>              <!-- source -->
                     <FCS-field-deg type="int">25</FCS-field-deg>            
                     <seeker-field-deg type="int">180</seeker-field-deg>     
                     <max-g type="int">25</max-g>                   
@@ -701,7 +755,7 @@
                     <thrust-lbf-stage-2 type="double">0.0</thrust-lbf-stage-2>
                     <stage-1-duration-sec type="double">40</stage-1-duration-sec>
                     <stage-2-duration-sec type="double">0.0</stage-2-duration-sec>
-                    <weight-launch-lbs type="double">462</weight-launch-lbs>            <!-- source -->
+                    <weight-launch-lbs type="double">462</weight-launch-lbs>              <!-- source -->
                     <weight-warhead-lbs type="double">126</weight-warhead-lbs>            <!-- source -->
                     <drag-coeff type="double">0.12</drag-coeff>                   
                     <drag-area type="double">3.14</drag-area>                             <!-- source -->
