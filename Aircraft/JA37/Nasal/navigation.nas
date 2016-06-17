@@ -65,6 +65,12 @@ var data_display = func ( key ) {
 
 # If a button on the navpanel is pressed, run this one.
 var nav_button = func ( key ) {
+	#-3 is landingsbas button
+	#-2 is startbas button
+	#-1 is BX
+	# 0 is nil
+	# 1-9 is B1-B9
+	# if landing, starting, or 1-9, then check if the waypoint is valid. if it is, then set to that. otherwise, set to the current or set to 0.
 	datpan.np_last_pressed.setValue(key);
 }
 
@@ -91,10 +97,10 @@ var display_update = func() {
 	# knob is at ref/lola
 	# show lat/lon of current waypoint/bp button/landing button.
 	} elsif ( datpan.dp_mode.getValue() == 1 ) {
-
+		#reset the last-pressed to 0 for nil
 		# find which waypoint we need to display.
 		if ( props.globals.getNode("/autopilot/route-manager/active").getValue() == 1 ) {
-			if ( datpan.np_last_pressed.getValue() == -1 or props.globals.getNode("/autopilot/route-manager/route/wp["~datpan.np_last_pressed~"]") == nil ) {
+			if ( datpan.np_last_pressed.getValue() <= 0 or props.globals.getNode("/autopilot/route-manager/route/wp["~datpan.np_last_pressed~"]") == nil ) {
 				var current_wp = props.globals.getNode("autopilot/route-manager/current-wp").getValue();
 			} else {
 				var current_wp = datpan.np_last_pressed.getValue();
@@ -179,7 +185,7 @@ setlistener(datpan.inout, func {
 # knob listener
 setlistener(datpan.dp_mode, func {
 	if ( datpan.dp_mode.getValue() == 1 and datpan.inout == 1 ) {
-		datpan.np_last_pressed.setValue(-1);
+		datpan.np_last_pressed.setValue(0);
 	}
 });
 		
