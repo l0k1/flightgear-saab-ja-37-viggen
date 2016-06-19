@@ -17,6 +17,7 @@
 #				<dp-display type="int" n="6">-1</dp-display>
 #				<dp-display-readout type="int">0</dp-display-readout>
 #				<dp-display-pos type="int">0</dp-display-pos>
+#				<idnr type="int">0</idnr>
 
 
 
@@ -32,6 +33,7 @@ datpan = {
 	tils_group:  			"/sim/ja37/navigation/tils-group",
 	dp_prop_input:			"/sim/ja37/navigation/dp-display-input",
 	np_last_pressed:		"/sim/ja37/navigation/np-last-pressed",
+	idnr:					"/sim/ja37/navigation/idnr",
 };
 
 foreach(var name; keys(datpan)) {
@@ -86,7 +88,6 @@ var display_update = func() {
 	
 	########################### knob is at act-pos ###########################
 	# display alternates between lat and lon - using decimal format here for simplicities sake.
-	# if a B# button is pressed, update the current waypoint to that waypoint.
 	if ( datpan.dp_mode.getValue() == 0 ) {
 		
 		
@@ -98,20 +99,13 @@ var display_update = func() {
 			datpan.dp_prop_input.setValue( abs(props.globals.getNode("/position/latitude-deg/").getValue()) * 10000 );
 		}
 		
-		if ( datpan.np_last_pressed.getValue() != 0 ) {
-			var key = datpan.np_last_pressed.getValue();
-			if ( key == -2 ) {
-				props.globals.getNode("/autopilot/route-manager/current-wp").setValue(0);
-			} elsif ( key == -3 ) {
-				var final_wp = props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1;
-				props.globals.getNode("/autopilot/route-manager/current-wp").setValue( final_wp );
-			} elsif ( key <= props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1 ) {
-				props.globals.getNode("/autopilot/route-manager/current-wp").setValue( key );
-			}
+		# update every second
+		# doing it this way, as pressing a nav_button will call the display_update function, and I want to avoid unnecessary multiple settimers()
+		if ( key == 0 ) {
+			settimer( func { display_update(); }, 1);
+		} else {
 			datpan.np_last_pressed.setValue(0);
 		}
-		# update every second
-		settimer( func { display_update(); }, 1);
 		
 	########################### knob is at ref/lola ###########################
 	# show lat/lon of current waypoint/bp button/landing button.
@@ -141,8 +135,6 @@ var display_update = func() {
 		} else {
 			clear_display();
 		}
-		# update every second
-		settimer( func { display_update(); }, 1);
 	
 	########################### knob is at WP ###########################
 	## show lat/lon of L/LS/L1/L2 base and tils channel.
@@ -164,18 +156,10 @@ var display_update = func() {
 			}
 			if ( props.globals.getNode("/autopilot/route-manager/route/wp["~current_wp~"]/limit[0]") != nil ) {
 				var limit_output1 = props.globals.getNode("/autopilot/route-manager/route/wp["~current_wp~"]/limit[0]").getValue();
-				if ( size(limit_output1) == 1 ) {
-					limit_output1 = "00" ~ limit_output1;
-				} elsif ( size(limit_output1) == 2 ) {
-					limit_output1 = "0" ~ limit_output1;
-				}
+				ouput_normalize_3(limit_output1);
 				if ( props.globals.getNode("/autopilot/route-manager/route/wp["~current_wp~"]/limit[1]") != nil ) {
 					var limit_output2 = props.globals.getNode("/autopilot/route-manager/route/wp["~current_wp~"]/limit[1]").getValue();
-					if ( size(limit_output2) == 1 ) {
-						limit_output2 = "00" ~ limit_output2;
-					} elsif ( size(limit_output2) == 2 ) {
-						limit_output2 = "0" ~ limit_output2;
-					}
+					ouput_normalize_3(limit_output2);
 				} else {
 					limit_output2 = "";
 				}
@@ -184,19 +168,102 @@ var display_update = func() {
 		} else {
 			clear_display();
 		}
-			
 	
 	########################### knob is at wind/route/target ###########################
+	# shows wind value
+	# if a B# button is pressed, update the current waypoint to that waypoint.
 	} elsif ( datpan.dp_mode.getValue() == 3 ) {
+		if ( key != 0 ) {
+			#update waypoint
+			var key = datpan.np_last_pressed.getValue();
+			if ( key == -2 ) {
+				props.globals.getNode("/autopilot/route-manager/current-wp").setValue(0);
+			} elsif ( key == -3 ) {
+				var final_wp = props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1;
+				props.globals.getNode("/autopilot/route-manager/current-wp").setValue( final_wp );
+			} elsif ( key <= props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1 ) {
+				props.globals.getNode("/autopilot/route-manager/current-wp").setValue( key );
+			}
+			datpan.np_last_pressed.setValue(0);
+		} else {
+			#output wind values
+			var output1 = output_normalize_3(int(props.globals.getNode("/environment/wind-from-heading-deg").getValue()));
+			var output2 = output_normalize_2(int(props.globals.getNode("/environment/wind-speed-kt").getValue()));
+			datpan.dp_prop_input.setValue(output1 ~ output2);
+			settimer( func { display_update(); }, 5);
+		}
 	
 	########################### knob is at time ###########################
+	## UTC time displayed if LS
+	## Attack time for target breakpoint if target breakpoint button pressed
+	## if there's a timetable inputted, default to time table error
+	## if not, estimated total flight time displayed default
 	} elsif ( datpan.dp_mode.getValue() == 4 ) {
-	
+		var cur_hour = output_normalize_2(props.globals.getNode("/sim/time/utc/hour").getValue());
+		var cur_minute = output_normalize_2(props.globals.getNode("/sim/time/utc/minute").getValue());
+		var cur_second = output_normalize_2(props.globals.getNode("/sim/time/utc/second").getValue());
+		#output normal time
+		if ( key == -2 ) {
+			datpan.dp_prop_input.setValue(cur_hour ~ cur_minute ~ cur_second);
+		} elsif ( key > 0 and props.globals.getNode("/autopilot/route-manager/route/wp["~ key ~"]") != nil and props.globals.getNode("/autopilot/route-manager/route/wp["~ key ~"]/time_arrival") != nil ) {
+			var time_arrival = props.globals.getNode("/autopilot/route-manager/route/wp["~ key ~"]/time_arrival").getValue();
+			#arrival time - current time
+			var time_offset_hour = num(left(time_arrival,2)) - cur_hour;
+			if ( time_offset_hour < 0 ) { 
+				time_offset_hour = time_offset_hour + 24;
+			}
+			time_offset_hour = output_normalize_2(time_offset_hour);
+			
+			var time_offset_minute = num(right(left(time_arrival,4),2) - cur_minute;
+			if ( time_offset_minute < 0 ) { 
+				time_offset_minute = time_offset_minute + 60;
+				time_offset_hour = time_offset_hour + 1;
+			}
+			time_offset_minute = output_normalize_2(time_offset_minute);
+			
+			var time_offset_second = num(right(left(time_arrival,4),2) - cur_second;
+			if ( time_offset_second < 0 ) { 
+				time_offset_second = time_offset_second + 60;
+				time_offset_minute = time_offset_minute + 1;
+				if ( time_offset_minute > 60 ) { 
+					time_offset_minute = time_offset_minute - 60;
+					time_offset_hour = time_offset_hour + 1;
+				}
+			}
+			time_offset_second = output_normalize_2(time_offset_second);
+			
+			datpan.dp_prop_input.setValue( time_offset_hour ~ time_offset_minute ~ time_offset_second );
+		} else {
+			#show estimated time to arrival
+			var time_left = int(props.globals.getNode("/autopilot/route-manager/ete").getValue());
+			# 3 599 999 is 999 hours, 59 minutes, 59 seconds, and is the max our display can handle
+			if ( time_left > 3599999 ) {
+				clear_display();
+				return;
+			}
+			var time_hour = output_normalize_3( int(time_left/60/60) );
+			var time_minute = output_normalize_2( int( ((time_left/60/60) - int(time_left/60/60)) * 60 ) );
+			var time_second = output_normalize_2( (((time_left/60/60) - int(time_left/60/60)) * 60) - int((((time_left/60/60) - int(time_left/60/60)) * 60)) * 60 );
+			datpan.dp_prop_input.setValue( time_hour ~ time_minute ~ time_second );
+		}
+		
+		settimer( func { display_update(); }, 1);
+			
 	########################### knob is at tact ###########################
+	## shows remaining fuel in kilograms
 	} elsif ( datpan.dp_mode.getValue() == 5 ) {
+		var current_fuel_kg = props.globals.getNode("/consumables/fuel/total-fuel-kg").getValue();
+		datpan.dp_prop_input.setValue( int(current_fuel_kg );
+		
+		if ( key == 0 ) {
+			settimer( func { display_update(); }, 1);
+		} else {
+			datpan.np_last_pressed.setValue(0);
+		}
 	
 	########################### knob is at id-nr ###########################
 	} elsif ( datpan.dp_mode.getValue() == 6 ) {
+		datpan.dp_prop_input.setValue( datpan.idnr.getValue() );
 	}
 }
 
@@ -228,6 +295,22 @@ var readout_listener = func () {
 	}
 	
 	datpan.dp_display_readout.setValue( datpan.dp_prop_input.getValue() );
+}
+
+var ouput_normalize_2 = func (value) {
+	if ( size(value) == 1 ) {
+		value = "0" ~ value;
+	}
+	return value;
+}
+
+var ouput_normalize_3 = func (value) {
+	if ( size(value) == 1 ) {
+		value = "00" ~ value;
+	} elsif ( size(value) == 2 ) {
+		value = "0" ~ value;
+	}
+	return value;
 }
 
 # display input property listener
@@ -284,7 +367,7 @@ display_update();
 ## format hhmmss
 ## press "LS" to set current time
 ## press B1-BX to set time expected to be at waypoint
-## cruising mach number, first three positions in the format: 125, which equals 1.25 mach. anything over 399 fails.
+## press "L" to set cruising mach number, first three positions in the format: 125, which equals 1.25 mach. anything over 399 fails.
 ### (not sure what this is supposed to do - maybe counts in with the fuel consumption?)
 ## fuel calcs beginat mach 055, and don't go over mach 085
 
@@ -316,7 +399,7 @@ display_update();
 
 # if time
 ## Civvie time displayed if LS
-## Attack timefor target braeakpoint if target breakpoint button pressed
+## Attack time for target breakpoint if target breakpoint button pressed
 ## if there's a timetable inputted, default to time table error
 ## if not, estimated total flight time displayed default
 ## if nav breakpoint, cruising mach is displayed.
