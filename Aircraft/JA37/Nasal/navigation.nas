@@ -71,6 +71,7 @@ var nav_button = func ( key ) {
 	# 0 is nil
 	# 1-9 is B1-B9
 	# if landing, starting, or 1-9, then check if the waypoint is valid. if it is, then set to that. otherwise, set to the current or set to 0.
+	# need to handle all this in this function?
 	datpan.np_last_pressed.setValue(key);
 }
 
@@ -81,9 +82,14 @@ var display_update = func() {
 	# if the switch is in the "IN" position, exit this function.
 	if ( datpan.inout.getValue() == 0 ) { return; }
 	
-	# knob is at act-pos
+	var key = datpan.np_last_pressed.getValue()
+	
+	########################### knob is at act-pos ###########################
 	# display alternates between lat and lon - using decimal format here for simplicities sake.
+	# if a B# button is pressed, update the current waypoint to that waypoint.
 	if ( datpan.dp_mode.getValue() == 0 ) {
+		
+		
 		if ( int(math.mod(props.globals.getNode("/sim/time/elapsed-sec").getValue(), 2)) == 1 ) {
 			# update longitude on odd seconds
 			datpan.dp_prop_input.setValue( abs(props.globals.getNode("/position/longitude-deg/").getValue()) * 10000 );
@@ -91,19 +97,38 @@ var display_update = func() {
 			# update latitude
 			datpan.dp_prop_input.setValue( abs(props.globals.getNode("/position/latitude-deg/").getValue()) * 10000 );
 		}
+		
+		if ( datpan.np_last_pressed.getValue() != 0 ) {
+			var key = datpan.np_last_pressed.getValue();
+			if ( key == -2 ) {
+				props.globals.getNode("/autopilot/route-manager/current-wp").setValue(0);
+			} elsif ( key == -3 ) {
+				var final_wp = props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1;
+				props.globals.getNode("/autopilot/route-manager/current-wp").setValue( final_wp );
+			} elsif ( key <= props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1 ) {
+				props.globals.getNode("/autopilot/route-manager/current-wp").setValue( key );
+			}
+			datpan.np_last_pressed.setValue(0);
+		}
 		# update every second
 		settimer( func { display_update(); }, 1);
 		
-	# knob is at ref/lola
+	########################### knob is at ref/lola ###########################
 	# show lat/lon of current waypoint/bp button/landing button.
 	} elsif ( datpan.dp_mode.getValue() == 1 ) {
-		#reset the last-pressed to 0 for nil
+		# when the knob is rotated, np_last_pressed is set to 0 for nil
 		# find which waypoint we need to display.
 		if ( props.globals.getNode("/autopilot/route-manager/active").getValue() == 1 ) {
-			if ( datpan.np_last_pressed.getValue() <= 0 or props.globals.getNode("/autopilot/route-manager/route/wp["~datpan.np_last_pressed~"]") == nil ) {
+			if ( key == 0 or props.globals.getNode("/autopilot/route-manager/route/wp["~ key ~"]") == nil ) {
 				var current_wp = props.globals.getNode("autopilot/route-manager/current-wp").getValue();
 			} else {
-				var current_wp = datpan.np_last_pressed.getValue();
+				if ( key == -2 ) {
+					var current_wp = 0;
+				} elsif ( key == -3 ) {
+					var current_wp = props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1;
+				} elsif ( key <= props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1 ) {
+					var current_wp = key;
+				}
 			}
 			
 			if ( int(math.mod(props.globals.getNode("/sim/time/elapsed-sec").getValue(), 2)) == 1 ) {
@@ -119,21 +144,58 @@ var display_update = func() {
 		# update every second
 		settimer( func { display_update(); }, 1);
 	
-	#knob is at WP
+	########################### knob is at WP ###########################
 	## show lat/lon of L/LS/L1/L2 base and tils channel.
 	## if pressed b1-b9,show limits of nav point
+	## just gonna do the limits, as the lat/lon is already covered by ref/lola, and tils channel... not sure if going to be used yet.
 	} elsif ( datpan.dp_mode.getValue() == 2 ) {
+		# first need to find waypoint to show.
+		if ( props.globals.getNode("/autopilot/route-manager/active").getValue() == 1 ) {
+			if ( key == 0 or props.globals.getNode("/autopilot/route-manager/route/wp["~ key ~"]") == nil ) {
+				var current_wp = props.globals.getNode("autopilot/route-manager/current-wp").getValue();
+			} else {
+				if ( key == -2 ) {
+					var current_wp = 0;
+				} elsif ( key == -3 ) {
+					var current_wp = props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1;
+				} elsif ( key <= props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1 ) {
+					var current_wp = key;
+				}
+			}
+			if ( props.globals.getNode("/autopilot/route-manager/route/wp["~current_wp~"]/limit[0]") != nil ) {
+				var limit_output1 = props.globals.getNode("/autopilot/route-manager/route/wp["~current_wp~"]/limit[0]").getValue();
+				if ( size(limit_output1) == 1 ) {
+					limit_output1 = "00" ~ limit_output1;
+				} elsif ( size(limit_output1) == 2 ) {
+					limit_output1 = "0" ~ limit_output1;
+				}
+				if ( props.globals.getNode("/autopilot/route-manager/route/wp["~current_wp~"]/limit[1]") != nil ) {
+					var limit_output2 = props.globals.getNode("/autopilot/route-manager/route/wp["~current_wp~"]/limit[1]").getValue();
+					if ( size(limit_output2) == 1 ) {
+						limit_output2 = "00" ~ limit_output2;
+					} elsif ( size(limit_output2) == 2 ) {
+						limit_output2 = "0" ~ limit_output2;
+					}
+				} else {
+					limit_output2 = "";
+				}
+				datpan.dp_prop_input.setValue(limit_output1 ~ limit_output2);
+			}
+		} else {
+			clear_display();
+		}
+			
 	
-	#knob is at wind/route/target
+	########################### knob is at wind/route/target ###########################
 	} elsif ( datpan.dp_mode.getValue() == 3 ) {
 	
-	#knob is at time
+	########################### knob is at time ###########################
 	} elsif ( datpan.dp_mode.getValue() == 4 ) {
 	
-	#knob is at tact
+	########################### knob is at tact ###########################
 	} elsif ( datpan.dp_mode.getValue() == 5 ) {
 	
-	#knob is at id-nr
+	########################### knob is at id-nr ###########################
 	} elsif ( datpan.dp_mode.getValue() == 6 ) {
 	}
 }
