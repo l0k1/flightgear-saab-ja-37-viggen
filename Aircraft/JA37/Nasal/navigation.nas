@@ -75,6 +75,21 @@ var nav_button = func ( key ) {
 	# if landing, starting, or 1-9, then check if the waypoint is valid. if it is, then set to that. otherwise, set to the current or set to 0.
 	# need to handle all this in this function?
 	datpan.np_last_pressed.setValue(key);
+	
+	#update waypoint if in/out is out and knob is at wind/route/target
+	#doing this 
+	if ( datpan.inout.getValue() == 0 and datpan.dp_mode.getValue() == 3 )
+		var key = datpan.np_last_pressed.getValue();
+		if ( key == -2 ) {
+			props.globals.getNode("/autopilot/route-manager/current-wp").setValue(0);
+		} elsif ( key == -3 ) {
+			var final_wp = props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1;
+			props.globals.getNode("/autopilot/route-manager/current-wp").setValue( final_wp );
+		} elsif ( key <= props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1 ) {
+			props.globals.getNode("/autopilot/route-manager/current-wp").setValue( key );
+		}
+		datpan.np_last_pressed.setValue(0);
+	}
 }
 
 # Used for updating display output when the in/out switch is set to "out".
@@ -171,27 +186,13 @@ var display_update = func() {
 	
 	########################### knob is at wind/route/target ###########################
 	# shows wind value
-	# if a B# button is pressed, update the current waypoint to that waypoint.
+	# if a B# button is pressed, update the current waypoint to that waypoint (handled in the B# button listener).
 	} elsif ( datpan.dp_mode.getValue() == 3 ) {
-		if ( key != 0 ) {
-			#update waypoint
-			var key = datpan.np_last_pressed.getValue();
-			if ( key == -2 ) {
-				props.globals.getNode("/autopilot/route-manager/current-wp").setValue(0);
-			} elsif ( key == -3 ) {
-				var final_wp = props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1;
-				props.globals.getNode("/autopilot/route-manager/current-wp").setValue( final_wp );
-			} elsif ( key <= props.globals.getNode("/autopilot/route-manager/route/num").getValue() - 1 ) {
-				props.globals.getNode("/autopilot/route-manager/current-wp").setValue( key );
-			}
-			datpan.np_last_pressed.setValue(0);
-		} else {
-			#output wind values
-			var output1 = output_normalize_3(int(props.globals.getNode("/environment/wind-from-heading-deg").getValue()));
-			var output2 = output_normalize_2(int(props.globals.getNode("/environment/wind-speed-kt").getValue()));
-			datpan.dp_prop_input.setValue(output1 ~ output2);
-			settimer( func { display_update(); }, 5);
-		}
+		#output wind values
+		var output1 = output_normalize_3(int(props.globals.getNode("/environment/wind-from-heading-deg").getValue()));
+		var output2 = output_normalize_2(int(props.globals.getNode("/environment/wind-speed-kt").getValue()));
+		datpan.dp_prop_input.setValue(output1 ~ output2);
+		settimer( func { display_update(); }, 5);
 	
 	########################### knob is at time ###########################
 	## UTC time displayed if LS
