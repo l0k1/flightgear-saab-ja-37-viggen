@@ -2232,7 +2232,7 @@ Model: Made drop-tank same color as underbelly of plane.
 GUI: Added splash screen for Black Knight livery.
 Model: Changed name of some liveries.
 
-4.000
+4.000 - 2016 June 15
 =====
 Sim: {Pinto} Added keybindings for radio navigation.
 GUI: Added the new keybindings for radio navigation to the help description.
@@ -2321,3 +2321,62 @@ Sound: Fixed that outer wing pylons release armement sounds was incorrect locati
 Sim: Made the center m55 fire.
 Sim: Stopped auto fire from m55, when new ammo is loaded, and the pylon was switched in meantime.
 Effect: Made the m55's fire from correct positions.
+Sim: Plane will now auto-remove armament that RB04 leaves no room for.
+Sim: Made the m71 work.
+Sim: Missiles now have custom report distance ala the Mirage.
+Sim: Damage from clusterbombs is now computed differently.
+Sim: Added damage from m71.
+Sim: Added A-10 ordnance to damage.
+Effect: Added explosions and model to falling M71.
+
+4.001 - 2016 June 28
+=====
+GUI: Changed the AJ-37 date to 1971.
+Effect: Made the M90 cluster bomb explosion more flat.
+GUI: Fixed that selecting long range fuel load would not allow fuel in drop tank.
+Sim: Fixed that hits from F14 AIM-9 would not do damage.
+Sound: Added hit sound for weapons fired from center pylon.
+GUI: Systems monitor will now show correct rpm for AJ37 engine.
+Model: Fixed that livery 01 and 48 had red text on the bottom vertical winglet.
+Sim: Made better system for ordnance to know if the target is correct class.
+Radar: Now guesses if multiplayer is ground or marine target.
+Sim: Adjusted some stats on RB-05, they can now hit air targets.
+GUI: Removed the following buttons from options: doppler and cannon spread.
+Aero: Adjusted drag for some stores.
+Model: Moved pilot eye view up 3 cm to better be able to instrument land.
+HUD: Adjusted symbology positions to fit the new pilot view.
+HUD: Fixed a nullpointer error.
+Sim: Fixed a nullpointer error.
+Model: {Pinto} Made nosecone prettier as seen from cockpit.
+Effect: Made store effects share textures.
+Effect: Prevented firing many M70 would crash Flightgear.
+Effect: Adjusted effects for M70.
+Sim: Adjusted stats for M70.
+HUD: Fixed that crosshair for M70 would sometimes be in wrong position.
+Sound: Replaced the exterior fan sound.
+Sound: Adjusted fly-by sounds and replaced the reheat part.
+Model: Fixed that mounting RB24J on left outer pylon, would mount it on right also.
+Model: Removed unneeded armament models from variants.
+Sim: Refactored custom properties that were mistakenly sent over MP due to their location.
+Sim: Reduced the time the flightrecorder records at full fidelity in half to help with people crashing the Viggen after flying for 15 mins.
+Sim: Make missiles/bombs call out the brevity code when fired.
+GUI: Fixed that RB71 would not be properly loaded from menu loadout options.
+Effect: Replaced the default redout/blackout system, with my own improved time based system.
+Model: {Pinto} Fixed right altimeter would change the barometric setting in same direction no matter what direction mouse scrollwheel was used.
+Effect: Adjusted blackout to be much more forgiving. Recovery and redout is less forgiving though.
+Model: Experimental 90 degrees FOV for cockpit view.
+GUI: Renamed JA37 to AJ37 in AJ options title.
+
+4.002
+=====
+Sim: Updated how RPM for core and fan are calculated.
+Model: {Pinto} Modeled the inlet fan and duct.
+Model: {Pinto} Reworked the engine outlet.
+Model: {Pinto} Made the nozzle.
+Aero: Introduced normal factor due to mach.
+Aero: Removed the artificial factor of mach tuch.
+Control: Adjusted pitch gearing.
+Effect: Reworked the M90 hit effect.
+Sim: Hit and fire msg. are now delayed if they are close coupled in time.
+Effect: Made wingtip vapour be seen over MP again.
+Effect: Made gunpod and bottom airinlet be shaded by ubershader.

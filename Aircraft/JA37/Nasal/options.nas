@@ -45,7 +45,7 @@ var Dialog = {
           titlebar.set("valign", "top");
           titlebar.set("pref-width", DIALOG_WIDTH);
           titlebar.addChild("empty").set("stretch", 1);
-          titlebar.addChild("text").set("label", "Saab JA-37 Viggen Options");
+          titlebar.addChild("text").set("label", getprop("sim/description")~" Options");
           titlebar.addChild("empty").set("stretch", 1);
           var w = titlebar.addChild("button");
             w.node.setValues({ "pref-width": 16, "pref-height": 16, legend: "", default: 0 });
@@ -294,7 +294,7 @@ var Dialog = {
           #topRow.addChild("empty").set("stretch", 1);
           me.dialog.elevatorButton.setBinding("nasal", "ja37.Dialog.elevatorToggle()");
 
-          ######   Elevator gearing button   #####
+          ######   Aerobatic button   #####
           var funRow = topRow.addChild("group");
           funRow.set("layout", "hbox");
           funRow.set("pref-height", 25);
@@ -355,19 +355,19 @@ var Dialog = {
           #me.dialog.mouseButton.setBinding("nasal", "ja37.Dialog.mouseToggle()");
 
           ######   Cannon spread button   #####
-          var cannonRow = topRow.addChild("group");
-          cannonRow.set("layout", "hbox");
-          cannonRow.set("pref-height", 25);
-          cannonRow.set("pref-width", DIALOG_WIDTH - SIDELOGO_WIDTH - 12);
+          #var cannonRow = topRow.addChild("group");
+          #cannonRow.set("layout", "hbox");
+          #cannonRow.set("pref-height", 25);
+          #cannonRow.set("pref-width", DIALOG_WIDTH - SIDELOGO_WIDTH - 12);
           #tracksRow.set("valign", "center");
           
-          var mouseText = cannonRow.addChild("text").set("label", "Cannon spread (10 degs) :");
-          cannonRow.addChild("empty").set("stretch", 1);
-          me.dialog.cannonButton = cannonRow.addChild("button");
-          me.dialog.cannonButton.set("halign", "right");
-          me.dialog.cannonButton.node.setValues({ "pref-width": 75, "pref-height": 25, legend: " x ", default: 0 });
+          #var mouseText = cannonRow.addChild("text").set("label", "Cannon spread (10 degs) :");
+          #cannonRow.addChild("empty").set("stretch", 1);
+          #me.dialog.cannonButton = cannonRow.addChild("button");
+          #me.dialog.cannonButton.set("halign", "right");
+          #me.dialog.cannonButton.node.setValues({ "pref-width": 75, "pref-height": 25, legend: " x ", default: 0 });
           #topRow.addChild("empty").set("stretch", 1);
-          me.dialog.cannonButton.setBinding("nasal", "ja37.Dialog.cannonToggle()");
+          #me.dialog.cannonButton.setBinding("nasal", "ja37.Dialog.cannonToggle()");
 
           ######   annunciation button   #####
           var annunRow = topRow.addChild("group");
@@ -399,18 +399,18 @@ var Dialog = {
           me.dialog.realRadarButton.setBinding("nasal", "ja37.Dialog.realRadarToggle()");
 
           ######   doppler radar button   #####
-          var dopplerRow = topRow.addChild("group");
-          dopplerRow.set("layout", "hbox");
-          dopplerRow.set("pref-height", 25);
-          dopplerRow.set("pref-width", DIALOG_WIDTH - SIDELOGO_WIDTH - 12);
+          #var dopplerRow = topRow.addChild("group");
+          #dopplerRow.set("layout", "hbox");
+          #dopplerRow.set("pref-height", 25);
+          #dopplerRow.set("pref-width", DIALOG_WIDTH - SIDELOGO_WIDTH - 12);
           #dopplerRow.set("valign", "center");
           
-          var dopplerText = dopplerRow.addChild("text").set("label", "Use real pulse doppler radar for MP planes:");
-          dopplerRow.addChild("empty").set("stretch", 1);
-          me.dialog.dopplerButton = dopplerRow.addChild("button");
-          me.dialog.dopplerButton.set("halign", "right");
-          me.dialog.dopplerButton.node.setValues({ "pref-width": 75, "pref-height": 25, legend: " x ", default: 0 });
-          me.dialog.dopplerButton.setBinding("nasal", "ja37.Dialog.dopplerToggle()");
+          #var dopplerText = dopplerRow.addChild("text").set("label", "Use real pulse doppler radar for MP planes:");
+          #dopplerRow.addChild("empty").set("stretch", 1);
+          #me.dialog.dopplerButton = dopplerRow.addChild("button");
+          #me.dialog.dopplerButton.set("halign", "right");
+          #me.dialog.dopplerButton.node.setValues({ "pref-width": 75, "pref-height": 25, legend: " x ", default: 0 });
+          #me.dialog.dopplerButton.setBinding("nasal", "ja37.Dialog.dopplerToggle()");
 
           ######   missile msg button   #####
           var rb24msgRow = topRow.addChild("group");
@@ -531,46 +531,46 @@ var Dialog = {
     },
 
     breakToggle: func {
-      var version = getprop("sim/ja37/supported/crash-system");
-      var enabled = version==0?getprop("sim/ja37/damage/enabled"):crash1.crashCode.isStarted();
+      var version = getprop("ja37/supported/crash-system");
+      var enabled = version==0?getprop("ja37/damage/enabled"):crash1.crashCode.isStarted();
       if(enabled == 1) {
-        version==0?setprop("sim/ja37/damage/enabled", 0):crash1.crashCode.stop();
+        version==0?setprop("ja37/damage/enabled", 0):crash1.crashCode.stop();
       } else {
-        version==0?setprop("sim/ja37/damage/enabled", 1):crash1.crashCode.start();
+        version==0?setprop("ja37/damage/enabled", 1):crash1.crashCode.start();
       }
       me.refreshButtons();
     },
 
     reverseToggle: func {
       ja37.click();
-      var enabled = getprop("sim/ja37/autoReverseThrust");
-      setprop("sim/ja37/autoReverseThrust", !enabled);
+      var enabled = getprop("ja37/autoReverseThrust");
+      setprop("ja37/autoReverseThrust", !enabled);
       me.refreshButtons();
     },
 
     hudToggle: func {
-      var enabled = getprop("sim/ja37/hud/mode");
-      setprop("sim/ja37/hud/mode", !enabled);
+      var enabled = getprop("ja37/hud/mode");
+      setprop("ja37/hud/mode", !enabled);
       me.refreshButtons();
     },  
 
 #    radarToggle: func {
 #      ja37.click();
-#      var enabled = getprop("sim/ja37/radar/enabled");
-#      setprop("sim/ja37/radar/enabled", !enabled);
+#      var enabled = getprop("ja37/radar/enabled");
+#      setprop("ja37/radar/enabled", !enabled);
 #      me.refreshButtons();
 #    },
 
 #    tracksToggle: func {
 #      ja37.click();
-#      var enabled = getprop("sim/ja37/hud/tracks-enabled");
-#      setprop("sim/ja37/hud/tracks-enabled", !enabled);
+#      var enabled = getprop("ja37/hud/tracks-enabled");
+#      setprop("ja37/hud/tracks-enabled", !enabled);
 #      me.refreshButtons();
 #    },
 
     bankToggle: func {
-      var enabled = getprop("sim/ja37/hud/bank-indicator");
-      setprop("sim/ja37/hud/bank-indicator", !enabled);
+      var enabled = getprop("ja37/hud/bank-indicator");
+      setprop("ja37/hud/bank-indicator", !enabled);
       me.refreshButtons();
     },
 
@@ -597,8 +597,8 @@ var Dialog = {
 
     funToggle: func {
       ja37.click();
-      var enabled = getprop("sim/ja37/avionics/fun");
-      setprop("sim/ja37/avionics/fun", !enabled);
+      var enabled = getprop("ja37/avionics/fun");
+      setprop("ja37/avionics/fun", !enabled);
       me.refreshButtons();
     },
 
@@ -644,20 +644,20 @@ var Dialog = {
     },    
 
     annunToggle: func {
-      var enabled = getprop("sim/ja37/sound/annunciation-enabled");
-      setprop("sim/ja37/sound/annunciation-enabled", !enabled);
+      var enabled = getprop("ja37/sound/annunciation-enabled");
+      setprop("ja37/sound/annunciation-enabled", !enabled);
       me.refreshButtons();
     },
 
     realRadarToggle: func {
-      var enabled = getprop("sim/ja37/radar/look-through-terrain");
-      setprop("sim/ja37/radar/look-through-terrain", !enabled);
+      var enabled = getprop("ja37/radar/look-through-terrain");
+      setprop("ja37/radar/look-through-terrain", !enabled);
       me.refreshButtons();
     },
 
     dopplerToggle: func {
-      var enabled = getprop("sim/ja37/radar/doppler-enabled");
-      setprop("sim/ja37/radar/doppler-enabled", !enabled);
+      var enabled = getprop("ja37/radar/doppler-enabled");
+      setprop("ja37/radar/doppler-enabled", !enabled);
       me.refreshButtons();
     },
 
@@ -704,27 +704,27 @@ var Dialog = {
     },
 
     thicker: func {
-      setprop("sim/ja37/hud/stroke-linewidth", getprop("sim/ja37/hud/stroke-linewidth") + 0.5);
+      setprop("ja37/hud/stroke-linewidth", getprop("ja37/hud/stroke-linewidth") + 0.5);
       canvas_HUD.reinit(canvas_HUD.on_backup_power);
     },
 
     defaultThickness: func {
-      setprop("sim/ja37/hud/stroke-linewidth", 4);
+      setprop("ja37/hud/stroke-linewidth", 4);
       canvas_HUD.reinit(canvas_HUD.on_backup_power);
     },    
 
     thinner: func {
-      var w = getprop("sim/ja37/hud/stroke-linewidth");
+      var w = getprop("ja37/hud/stroke-linewidth");
       w = w - 0.5;
       if(w < 0.5) w = 0.5;
-      setprop("sim/ja37/hud/stroke-linewidth", w);
+      setprop("ja37/hud/stroke-linewidth", w);
       canvas_HUD.reinit(canvas_HUD.on_backup_power);
     },
 
     refreshButtons: func {
       # update break button
-      var version = getprop("sim/ja37/supported/crash-system");
-      var enabled = version==0?getprop("sim/ja37/damage/enabled"):crash1.crashCode.isStarted();
+      var version = getprop("ja37/supported/crash-system");
+      var enabled = version==0?getprop("ja37/damage/enabled"):crash1.crashCode.isStarted();
       var legend = "";
       if(enabled == 1) {
         legend = "Enabled";
@@ -733,7 +733,7 @@ var Dialog = {
       }
       me.dialog.breakButton.node.setValues({"legend": legend});
 
-      enabled = getprop("sim/ja37/autoReverseThrust");
+      enabled = getprop("ja37/autoReverseThrust");
       if(enabled == 1) {
         legend = "Enabled";
       } else {
@@ -741,7 +741,7 @@ var Dialog = {
       }
       me.dialog.reverseButton.node.setValues({"legend": legend});
 
-      enabled = getprop("sim/ja37/hud/mode");
+      enabled = getprop("ja37/hud/mode");
       if(enabled == 1) {
         legend = "Enabled";
       } else {
@@ -749,7 +749,7 @@ var Dialog = {
       }
       me.dialog.hudButton.node.setValues({"legend": legend});
 
-#      enabled = getprop("sim/ja37/radar/enabled");
+#      enabled = getprop("ja37/radar/enabled");
 #      if(enabled == 1) {
 #        legend = "Enabled";
 #      } else {
@@ -757,7 +757,7 @@ var Dialog = {
 #      }
 #      me.dialog.radarButton.node.setValues({"legend": legend});
 
-#      enabled = getprop("sim/ja37/hud/tracks-enabled");
+#      enabled = getprop("ja37/hud/tracks-enabled");
 #      if(enabled == 1) {
 #        legend = "Enabled";
 #      } else {
@@ -765,7 +765,7 @@ var Dialog = {
 #      }
 #      me.dialog.tracksButton.node.setValues({"legend": legend});
 
-      enabled = getprop("sim/ja37/hud/bank-indicator");
+      enabled = getprop("ja37/hud/bank-indicator");
       if(enabled == 1) {
         legend = "Enabled";
       } else {
@@ -829,7 +829,7 @@ var Dialog = {
       }
       me.dialog.elevatorButton.node.setValues({"legend": legend});
 
-      enabled = getprop("sim/ja37/avionics/fun");
+      enabled = getprop("ja37/avionics/fun");
       if(enabled == 1) {
         legend = "Aerobatic";
       } else {
@@ -845,15 +845,15 @@ var Dialog = {
       #}
       #me.dialog.mouseButton.node.setValues({"legend": legend});
 
-      enabled = getprop("ai/submodels/submodel[3]/random");
-      if(enabled == 1) {
-        legend = "Enabled";
-      } else {
-        legend = "Disabled";
-      }
-      me.dialog.cannonButton.node.setValues({"legend": legend});
+      #enabled = getprop("ai/submodels/submodel[3]/random");
+      #if(enabled == 1) {
+      #  legend = "Enabled";
+      #} else {
+      #  legend = "Disabled";
+      #}
+      #me.dialog.cannonButton.node.setValues({"legend": legend});
 
-      enabled = getprop("sim/ja37/sound/annunciation-enabled");
+      enabled = getprop("ja37/sound/annunciation-enabled");
       if(enabled == 1) {
         legend = "Enabled";
       } else {
@@ -861,7 +861,7 @@ var Dialog = {
       }
       me.dialog.annunButton.node.setValues({"legend": legend});
 
-      enabled = getprop("sim/ja37/radar/look-through-terrain");
+      enabled = getprop("ja37/radar/look-through-terrain");
       if(enabled == 1) {
         legend = "Disabled";
       } else {
@@ -869,13 +869,13 @@ var Dialog = {
       }
       me.dialog.realRadarButton.node.setValues({"legend": legend});
 
-      enabled = getprop("sim/ja37/radar/doppler-enabled");
-      if(enabled == 1) {
-        legend = "Enabled";
-      } else {
-        legend = "Disabled";
-      }
-      me.dialog.dopplerButton.node.setValues({"legend": legend});      
+      #enabled = getprop("ja37/radar/doppler-enabled");
+      #if(enabled == 1) {
+      #  legend = "Enabled";
+      #} else {
+      #  legend = "Disabled";
+      #}
+      #me.dialog.dopplerButton.node.setValues({"legend": legend});      
 
       enabled = getprop("payload/armament/msg");
       if(enabled == 1) {

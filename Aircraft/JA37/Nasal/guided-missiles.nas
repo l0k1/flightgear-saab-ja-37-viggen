@@ -127,8 +127,16 @@ var AIM = {
         m.rail_dist_m           = getprop("payload/armament/"~m.type_lc~"/rail-length-m");
         m.rail_forward          = getprop("payload/armament/"~m.type_lc~"/rail-point-forward");
         m.class                 = getprop("payload/armament/"~m.type_lc~"/class");
+        m.brevity               = getprop("payload/armament/"~m.type_lc~"/fire-msg");
+        m.reportDist            = getprop("payload/armament/"~m.type_lc~"/max-report-distance");
 		m.aim_9_model           = getprop("payload/armament/models")~type~"/"~m.type_lc~"-";
 		m.elapsed_last          = 0;
+
+		m.target_air = find("A", m.class)==-1?FALSE:TRUE;
+		m.target_sea = find("M", m.class)==-1?FALSE:TRUE;#use M for marine, since S can be confused with surface.
+		m.target_gnd = find("G", m.class)==-1?FALSE:TRUE;
+
+
 		# Find the next index for "models/model" and create property node.
 		# Find the next index for "ai/models/aim-9" and create property node.
 		# (M. Franz, see Nasal/tanker.nas)
@@ -1059,7 +1067,7 @@ var AIM = {
             }
 
             var Daground = 0;# zero for sealevel in case target is ship. Don't shoot A/S missiles over terrain. :)
-            if(me.class == "A/G") {
+            if(me.Tgt.get_type() == SURFACE) {
                 Daground = me.nextGroundElevation * M2FT;
             }
             var loft_alt = me.loft_alt;
@@ -1307,7 +1315,7 @@ var AIM = {
 
 		var phrase = sprintf( me.type~" exploded: %01.1f", min_distance) ~ " meters from: " ~ me.callsign;
 		print(phrase~"  Reason: "~reason~sprintf(" time %.1f", me.life_time));
-		if (min_distance < 65) {
+		if (min_distance < me.reportDist) {
 			me.sendMessage(phrase);
 		} else {
 			me.sendMessage(me.type~" missed "~me.callsign~": "~reason);
@@ -1320,7 +1328,7 @@ var AIM = {
 
 	sendMessage: func (str) {
 		if (getprop("payload/armament/msg")) {
-			setprop("/sim/multiplay/chat", armament.defeatSpamFilter(str));
+			armament.defeatSpamFilter(str);
 		} else {
 			setprop("/sim/messages/atc", str);
 		}
@@ -1360,9 +1368,9 @@ var AIM = {
 		if (1==1 or contact != me.Tgt) {
 			#print("search2");
 			if (contact != nil and contact.isValid() == TRUE and
-				(  (contact.get_type() == SURFACE and me.class == "A/G")
-                or (contact.get_type() == AIR and me.class == "A/A")
-                or (contact.get_type() == MARINE and me.class == "A/G"))) {
+				(  (contact.get_type() == SURFACE and me.target_gnd == TRUE)
+                or (contact.get_type() == AIR and me.target_air == TRUE)
+                or (contact.get_type() == MARINE and me.target_sea == TRUE))) {
 				#print("search3");
 				var tgt = contact; # In the radar range and horizontal field.
 				var rng = tgt.get_range();
@@ -1550,7 +1558,7 @@ var AIM = {
 		me.latN.setDoubleValue(me.coord.lat());
 		me.lonN.setDoubleValue(me.coord.lon());
 		me.altN.setDoubleValue(me.coord.alt()*M2FT);
-
+		me.pitchN.setDoubleValue(0);
 		me.msl_prop.setBoolValue(0);
 		me.smoke_prop.setBoolValue(0);
 		me.explode_prop.setBoolValue(1);

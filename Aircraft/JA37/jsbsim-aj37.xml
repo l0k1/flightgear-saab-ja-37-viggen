@@ -12,13 +12,13 @@
 <fdm_config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Saab AJ-37 Viggen" version="2.0" release="BETA" xsi:noNamespaceSchemaLocation="http://jsbsim.sourceforge.net/JSBSim.xsd">
   <fileheader>
     <author> Nikolai V. Chr. </author>
-    <filecreationdate> 2013-02-15 </filecreationdate>
-    <version> 3.110 </version>
+    <filecreationdate> 2016-06-10 </filecreationdate>
+    <version> 4.001 </version>
     <license>
       <licenseName>GPL 2 (General Public License version 2)</licenseName>
       <licenseURL>http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</licenseURL>
     </license>
-    <description> Models a Saab JA-37 Viggen </description>
+    <description> Models a Saab AJ-37 Viggen </description>
     <note>
          This model was created using data that is, or has been, publically
          available by means of (declassified) technical reports, textbooks, image graphs or

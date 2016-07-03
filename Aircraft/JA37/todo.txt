@@ -9,7 +9,6 @@ GUI: Improve Checklists.
 GUI: Option to switch off hitting stuff above ground. (switched off now, might confuse users)
 Aero: Make cannon pod detachable and have pointweight. (and model it above drop-tank)
 Aero: Air-brakes, even though they got welded shut in mid 80ties. (Request from JazzTp)
-Aero: Make wave drag again influence droptank.
 Aero: Make recoil not assume that FDM rate is 120 Hz.
 Control: Pitch damper should also take lateral normal (Nz) acceleration as input as per manual.
 Control: Disable failure system from freezing surfaces (remove failure mode bug in 3.2- prevents)
@@ -21,17 +20,17 @@ Model: Put in not-working instruments and controls for immersion.
 Model: Some control textures should be aligned so they can be better viewed from current pilot point of view.
 Model: The minimum AoA the indicator should show is -4 degrees, not -7.
 Model: Fix that landing gear oleo struts now are too bright.
-Model: Fix the bloody irritating lag when getting near another JA37 in MP! (test if MP sounds are culprit)
 Model: Radar range control should be only 3 digits. (and be another place in the cockpit if should be accurate)
 Model: Make the tooltips fail when gauge fail.
 Model: The reserve generator. (ram air turbine)
 Model: Proper floor in the cockpit.
 Model: Buttons for ejecting drop-tank/armaments. They have a flip lid.
-Model: Fix that the common part of the variant model files are no longer the same.
 Model: Fix z-fighting on M71-rail and M90.
 Model: Make the AJ37 black tube next to HUD, used for vision guided munitions. It should have transparent glass cover.
+Model: Button with fliplid to jettison all stores including drop-tank.
+Model: Button with fliplid to jettison drop-tank.
 Animation: Show wheels spinning in MP also.
-Animation: Proper animation of gear doors.
+Animation: Proper animation of gear doors and gear retraction.
 Animation: Buffeting of view, when get hit, crash.
 Sim: Improve autopilot further. (alt-hold should use pitch not v-speed)
 Sim: Make autopilot depend fully on instrument properties not true properties. (95% done)
@@ -49,8 +48,6 @@ Sim: Lock warning when another plane get radar lock. (ja37, m2000-5, f-14b, f-15
 Sim: Complete hydraulic dependencies: Brakes.
 Sim: Hydraulic drain.
 Sim: Shift-m should be a key without shift instead for convenience.
-Sim: Weapons should require electrical power to track, check the manual.
-Sim: Button to jettison all stores including drop-tank.
 Sim: Specific damage to gears in crash code, speed of impact and vertical speed separate. (terrain type?)
 Sim: Make the weapon mode dial operational: simulated mode, operational mode and reduced mode.
 Sim: Make data-link between Viggens.
@@ -65,11 +62,11 @@ Sim: Stop auto-selecting when in tactical mode.
 Sim: RB99 will be rail launched if sitting on a rail instead of always dropped.
 Sim: Be able to notch the rb71 again.
 Sim: A/P control in cockpit: A/T on throttle. Trims change heading/altitude. Chapter 12-4 in AJS37 manual part 1.
-Sim: Make missiles call out the brevity code.
 Sim: Make speed and altitude limits on firing missiles.
-Sim: Damage proper from cluster bombs.
 Sim: Find the exact spot the center M70 fires from (submodels).
-Sim: Make the M71 work.
+Sim: Make retarded version of M71.
+Sim: Be able to switch if M55 should fire all at once, or one at a time.
+Radar: Make database of RCS of common aircrafts.
 Effect: Rembrandt landing lightcone.
 Effect: Make pilot faint/die due to G-forces.
 Effect: Make tires burst if too high speed with parking brakes.
@@ -85,7 +82,6 @@ HUD: Alt scale follow pitch lines at more than 1 degree roll from level flight. 
 HUD: All track semi circles and semi box should have a line in them. (might degrade performance)
 HUD: Fix that HUD selects diamond_node, not radar logic, so HUD can be turned off in external view.
 HUD: When DME are enabled at the same time as ILS with glideslope, the distance scale make the ILS view confusing.
-HUD: Sidewind indicator should really be 10 degs below plane axis line.
 HUD: Make crossing out of hud when armament not ready to fire and trigger is pressed.
 
 
@@ -96,18 +92,14 @@ Aero: Above mach 1 at higher altitudes, then plane seems to do some pitch oscill
 Animation: Selection view does not follow carriers or other ships till they move. (they lack radar properties)
 Control: {Pinto} Pitch damper does fast violent oscillations at 36000ft M2.25+ without droptank.
 GUI: The performance monitor can duplicate itself when selecting airport. [reproduced]
-HUD: I have experienced that tactical mode was on by default. [not reliable reproduced]
 HUD: In landing mode when horizont is out of view, heading scale does not show commanded heading.
 HUD: In landing mode, commanded altitude lines can be confused with ILS guidance.
-HUD: In tactical mode the diamond would sometimes not be painted. Distance, callsign and tail would be shown though.
 HUD: When autostarting is in progress, the HUD will switch off for a fraction of a second sometimes when loading stores. (due to stores mass moving the aircraft a bit and external power then gets disconnected.).
 HUD: When the altitude difference to a track is much larger than the horizontal distance, the track positions are off.
 HUD: {JazzTp} When FG HUD is in 2nd or 3rd mode, it does not go away when switching to custom. [reproduced]
 Model: CTRL-X in HUD view will not zoom to correct level.
-Model: Desert livery over MP is broken now.
 Model: Droptank indicator should really be a steerpoint indicator.
 Model: In FG 2.12 radar screen does not work as it should. (no canvas replacement)
-Model: Sim lag at final retraction of gear. [reproduced, select anims are to blame]
 Model: sim load-lag when coming near other ja37. [reproduced, select anims are probably to blame]
 Radar: Shooting at imdrone ship, it blinks in and out before getting lock.
 Report: {JabberWocky} After A/P the plane consumes too much fuel. [not reproduceable]
@@ -129,6 +121,7 @@ Sim: {Pinto} After fire M70, and reload, they will fire again. [might be fixed]
 Sim: {Pinto} Has experienced that 2 engine directories were created under engines. That leads to error in performance monitor.
 Sound: Could hear aim-9 growl even though not in tact mode, in external view.
 Sound: If at the end of non-looped replay view mode is fly-by-view, sounds will continue looping. [not reproduced]
+Effect: Firing many M70 rockets in quick succession will make FG crash. [Probably fixed]
 
 
 Issues with FG:

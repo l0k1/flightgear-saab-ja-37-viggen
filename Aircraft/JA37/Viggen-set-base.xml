@@ -64,12 +64,12 @@
         <aircraft-operator>Swedish Air Force</aircraft-operator>
         <aircraft-data>
             <!-- Properties that get saved to persist locally between FG sessions -->
-            <path>sim/ja37/radar/enabled</path>
-            <path>sim/ja37/hud/units-metric</path>
-            <path>sim/ja37/hud/mode</path>
-            <path>sim/ja37/hud/bank-indicator</path>
-            <path>sim/ja37/autoReverseThrust</path>
-            <path>sim/ja37/hud/stroke-linewidth</path>
+            <path>ja37/radar/enabled</path>
+            <path>ja37/hud/units-metric</path>
+            <path>ja37/hud/mode</path>
+            <path>ja37/hud/bank-indicator</path>
+            <path>ja37/autoReverseThrust</path>
+            <path>ja37/hud/stroke-linewidth</path>
             <path>ai/submodels/submodel[2]/random</path>
             <path>ai/submodels/submodel[3]/random</path>
             <!--<path>sim/model/livery/file</path>-->
@@ -134,12 +134,12 @@
         <view n="0">
             <internal userarchive="n">true</internal>
             <config>
-                <pitch-offset-deg type="double" userarchive="n">-23</pitch-offset-deg>
+                <pitch-offset-deg type="double" userarchive="n">-25</pitch-offset-deg>
                 <x-offset-m type="double" userarchive="n">0</x-offset-m>
-                <y-offset-m type="double" userarchive="n">0.71</y-offset-m>
+                <y-offset-m type="double" userarchive="n">0.74</y-offset-m>
                 <!-- remember to change eyepoint in JSB when changing this -->
                 <z-offset-m type="double" userarchive="n">-3.6</z-offset-m>
-                <default-field-of-view-deg type="double" userarchive="n">95</default-field-of-view-deg><!-- when changing this, change it in ja37.nas also -->
+                <default-field-of-view-deg type="double" userarchive="n">90</default-field-of-view-deg><!-- when changing this, change it in ja37.nas also -->
             </config>
         </view>
         <!--<view n="100">
@@ -255,8 +255,8 @@
                 <eye-lon-deg-path>/position/longitude-deg</eye-lon-deg-path>
                 <eye-alt-ft-path>/fdm/jsbsim/position/h-sl-ft</eye-alt-ft-path>
 
-                <eye-pitch-deg-path>/sim/ja37/radar/selection-pitch-deg</eye-pitch-deg-path>
-                <eye-heading-deg-path>/sim/ja37/radar/selection-heading-deg</eye-heading-deg-path>
+                <eye-pitch-deg-path>/ja37/radar/selection-pitch-deg</eye-pitch-deg-path>
+                <eye-heading-deg-path>/ja37/radar/selection-heading-deg</eye-heading-deg-path>
 
                 <at-model type="bool">true</at-model>
                 <at-model-idx type="int">0</at-model-idx>
@@ -277,7 +277,7 @@
                 <from-model-idx type="int">0</from-model-idx>
                 <pitch-offset-deg type="double">-10.0</pitch-offset-deg>
                 <x-offset-m type="double">0</x-offset-m>
-                <y-offset-m type="double">0.71</y-offset-m>
+                <y-offset-m type="double">0.74</y-offset-m>
                 <z-offset-m type="double">-3.6</z-offset-m>
                 <default-field-of-view-deg type="double">65</default-field-of-view-deg>
                 <ground-level-nearplane-m type="double">0.5f</ground-level-nearplane-m>
@@ -299,7 +299,7 @@
 *************************************************************************-->
         <rendering>
             <redout>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <parameters>
                     <!-- this will make screen pretty close to black at 9G, think max for pilot functioning is 8G-9G but have no official numbers.-->
                     <blackout-complete-g type="double">11.0</blackout-complete-g>
@@ -319,10 +319,10 @@
 *************************************************************************-->
         <multiplay>
             <!-- int 9, int 17, int 18, int 19, float 2, float 3 and float 9 is controlled from nasal or JSB
-                          -->
+                 free: float 6         -->
             <generic>
                 <!-- effects -->
-                <int n="0" alias="/sim/ja37/effect/smoke"/>                <!-- to show smoke -->
+                <int n="0" alias="/ja37/effect/smoke"/>                <!-- to show smoke -->
                 <int n="7" alias="/damage/sounds/explode-on"/>                <!-- to show explosion plus its sound -->
                 <!-- Animation control surfaces -->
                 <int n="1" alias="/fdm/jsbsim/fcs/canopy/hinges/serviceable"/>                <!-- to show detachment of canopy -->
@@ -338,8 +338,8 @@
                 <int n="8" alias="/engines/engine[0]/is-reversed"/>                <!-- to animate afterburnerflame -->
                 <!-- Animating light -->
                 <int n="5" alias="/sim/model/lighting/strobe/state"/>                <!-- to animate strobe -->
-                <float n="4" alias="/sim/ja37/effect/landing-light"/>                <!-- to animate landing lights -->
-                <int n="6" alias="/sim/ja37/effect/landing-light"/>                <!-- for backwards compatibility -->
+                <float n="4" alias="/ja37/effect/landing-light"/>                <!-- to animate landing lights -->
+                <int n="6" alias="/ja37/effect/landing-light"/>                <!-- for backwards compatibility -->
                 <int n="15" alias="/sim/model/lighting/beacon/state"/>                <!-- to animate beacons, backward compat -->
                 <float n="1" alias="/sim/model/lighting/beacon/state-rotary"/>                <!-- to animate beacons -->
                 <!-- Stores -->
@@ -355,7 +355,6 @@
                 <!--<float n="9" alias="/gear/gear[1]/compression-ft"/>-->                <!-- used for gear anim, deprecated -->
                 <!--<float n="10" alias="/gear/gear[2]/compression-ft"/>-->                <!-- used for gear anim, deprecated -->
                 <float n="0" alias="/gear/gear[0]/steering-norm"/>                <!-- Position and speed -->
-                <float n="6" alias="/position/altitude-ft"/>                <!-- used for vapor-cone -->
                 <float n="7" alias="/velocities/mach"/>                <!-- used for vapor-cone -->
                 <float n="17" alias="/velocities/airspeed-kt"/>                <!-- used in MP sound -->
                 <float n="18" alias="/velocities/speed-down-fps"/>                <!-- used in MP sound -->
@@ -406,122 +405,10 @@
 
 
 *************************************************************************-->
-        <ja37>
-            <accelerations>
-                <pilot-G type="double">1.0</pilot-G>
-            </accelerations>
-            <autoReverseThrust userarchive="y" type="bool">false</autoReverseThrust>
-            <supported>
-                <old-custom-fails type="int">0</old-custom-fails>
-                <hud type="bool">false</hud>
-                <radar type="bool">false</radar>
-                <options type="bool">false</options>
-                <landing-light type="bool">false</landing-light>
-                <initialized type="bool">false</initialized>
-                <popuptips type="int">0</popuptips>
-                <crash-system type="int">0</crash-system>
-                <ubershader type="bool">false</ubershader>
-                <fuel-temp type="bool">true</fuel-temp>
-                <new-marker type="bool">true</new-marker>
-            </supported>
-            <failures>
-                <installed type="bool">false</installed>
-            </failures>
-            <radar>
-                <selectedMP type="int">-1</selectedMP>
-                <selected type="int">-1</selected>
-                <enabled userarchive="y" type="bool">true</enabled>
-                <look-through-terrain type="bool">true</look-through-terrain>
-                <doppler-enabled type="bool">true</doppler-enabled>
-                <min-doppler-speed-kt type="double">50.0</min-doppler-speed-kt>
-            </radar>
-            <effect>
-                <landing-light type="double">0</landing-light>
-                <smoke type="int">1</smoke>
-                <!-- 1: off  2: yellow  3: blue -->
-                <smoke-cmd type="int">1</smoke-cmd>
-            </effect>
-            <blink>
-                <five-Hz>
-                    <state type="bool">false</state>
-                </five-Hz>
-                <ten-Hz>
-                    <state type="bool">false</state>
-                </ten-Hz>
-                <third-Hz>
-                    <state type="bool">false</state>
-                </third-Hz>
-            </blink>
-            <hud>
-                <tracks-enabled type="bool">true</tracks-enabled>
-                <units-metric userarchive="y" type="bool">false</units-metric>
-                <mode userarchive="y" type="bool">true</mode>
-                <current-mode type="int">0</current-mode>
-                <combat type="bool">false</combat>
-                <bank-indicator userarchive="y" type="bool">false</bank-indicator>
-                <callsign type="bool">true</callsign>
-                <stroke-linewidth userarchive="y" type="double">4.0</stroke-linewidth>
-                <TILS type="bool">false</TILS>
-                <landing-mode type="bool">false</landing-mode>
-            </hud>
-            <sound>
-                <click-on type="bool">false</click-on>
-                <terrain-on type="bool">false</terrain-on>
-                <speed-on type="bool">false</speed-on>
-                <stall-enabled type="bool">true</stall-enabled>
-                <mp-volume type="double">0.4</mp-volume>
-                <breath-volume type="double">0</breath-volume>
-                <annunciation-enabled type="bool">true</annunciation-enabled>
-                <thunder1 type="bool">false</thunder1>
-                <thunder2 type="bool">false</thunder2>
-                <thunder3 type="bool">false</thunder3>
-                <dist-thunder1 type="double">0.0</dist-thunder1>
-                <dist-thunder2 type="double">0.0</dist-thunder2>
-                <dist-thunder3 type="double">0.0</dist-thunder3>
-                <environment-volume type="double">0.0</environment-volume>
-                <rain-volume type="double">0.0</rain-volume>
-                <incoming1 type="bool">false</incoming1>
-                <incoming2 type="bool">false</incoming2>
-                <incoming3 type="bool">false</incoming3>
-                <incoming4 type="bool">false</incoming4>
-                <incoming5 type="bool">false</incoming5>
-                <incoming6 type="bool">false</incoming6>
-                <incoming7 type="bool">false</incoming7>
-                <incoming8 type="bool">false</incoming8>
-                <incoming9 type="bool">false</incoming9>
-                <incoming10 type="bool">false</incoming10>
-                <incoming11 type="bool">false</incoming11>
-                <incoming12 type="bool">false</incoming12>
-                <incoming type="bool">false</incoming>
-            </sound>
-            <damage>
-                <enabled type="bool">true</enabled>
-            </damage>
-            <avionics>
-                <altimeters-calibrated type="bool">0</altimeters-calibrated>
-                <primaryData type="bool">false</primaryData>
-                <TN type="bool">false</TN>
-                <ignitionSys type="bool">false</ignitionSys>
-                <startSys type="bool">false</startSys>
-                <joystick type="bool">false</joystick>
-                <canopyAndSeat type="bool">false</canopyAndSeat>
-                <oxygen type="bool">false</oxygen>
-                <autopilot type="bool">false</autopilot>
-                <auto-throttle-on type="bool">false</auto-throttle-on>
-                <auto-altitude-on type="bool">false</auto-altitude-on>
-                <auto-attitude-on type="bool">false</auto-attitude-on>
-                <fuel-internal-ratio type="double">0.0</fuel-internal-ratio>
-                <tankpump type="bool">false</tankpump>
-                <xtank type="bool">false</xtank>
-                <fun type="bool">false</fun>
-            </avionics>
-            <systems>
-                <oxygen-bottle-pressure type="double">0.0</oxygen-bottle-pressure>
-            </systems>
-        </ja37>
+        
         <replay>
             <buffer>
-                <high-res-time type="double">1200</high-res-time>              <!-- default:   60 -->
+                <high-res-time type="double">600</high-res-time>               <!-- default:   60 -->
                 <medium-res-time type="double">1200</medium-res-time>          <!-- default:  600 -->
                 <low-res-time type="double">3600</low-res-time>                <!-- default: 3600 -->
                 <medium-res-sample-dt type="double">0.5</medium-res-sample-dt> <!-- default:  0.5 -->
@@ -537,6 +424,119 @@
             <full-init type="bool">false</full-init>
         </time>
     </sim>
+    <ja37>
+        <accelerations>
+            <pilot-G type="double">1.0</pilot-G>
+        </accelerations>
+        <autoReverseThrust userarchive="y" type="bool">false</autoReverseThrust>
+        <supported>
+            <old-custom-fails type="int">0</old-custom-fails>
+            <hud type="bool">false</hud>
+            <radar type="bool">false</radar>
+            <options type="bool">false</options>
+            <landing-light type="bool">false</landing-light>
+            <initialized type="bool">false</initialized>
+            <popuptips type="int">0</popuptips>
+            <crash-system type="int">0</crash-system>
+            <ubershader type="bool">false</ubershader>
+            <fuel-temp type="bool">true</fuel-temp>
+            <new-marker type="bool">true</new-marker>
+        </supported>
+        <failures>
+            <installed type="bool">false</installed>
+        </failures>
+        <radar>
+            <selectedMP type="int">-1</selectedMP>
+            <selected type="int">-1</selected>
+            <enabled userarchive="y" type="bool">true</enabled>
+            <look-through-terrain type="bool">true</look-through-terrain>
+            <doppler-enabled type="bool">true</doppler-enabled>
+            <min-doppler-speed-kt type="double">50.0</min-doppler-speed-kt>
+        </radar>
+        <effect>
+            <landing-light type="double">0</landing-light>
+            <smoke type="int">1</smoke>
+            <!-- 1: off  2: yellow  3: blue -->
+            <smoke-cmd type="int">1</smoke-cmd>
+        </effect>
+        <blink>
+            <five-Hz>
+                <state type="bool">false</state>
+            </five-Hz>
+            <ten-Hz>
+                <state type="bool">false</state>
+            </ten-Hz>
+            <third-Hz>
+                <state type="bool">false</state>
+            </third-Hz>
+        </blink>
+        <hud>
+            <tracks-enabled type="bool">true</tracks-enabled>
+            <units-metric userarchive="y" type="bool">false</units-metric>
+            <mode userarchive="y" type="bool">true</mode>
+            <current-mode type="int">0</current-mode>
+            <combat type="bool">false</combat>
+            <bank-indicator userarchive="y" type="bool">false</bank-indicator>
+            <callsign type="bool">true</callsign>
+            <stroke-linewidth userarchive="y" type="double">4.0</stroke-linewidth>
+            <TILS type="bool">false</TILS>
+            <landing-mode type="bool">false</landing-mode>
+        </hud>
+        <sound>
+            <click-on type="bool">false</click-on>
+            <terrain-on type="bool">false</terrain-on>
+            <speed-on type="bool">false</speed-on>
+            <stall-enabled type="bool">true</stall-enabled>
+            <mp-volume type="double">0.4</mp-volume>
+            <breath-volume type="double">0</breath-volume>
+            <annunciation-enabled type="bool">true</annunciation-enabled>
+            <thunder1 type="bool">false</thunder1>
+            <thunder2 type="bool">false</thunder2>
+            <thunder3 type="bool">false</thunder3>
+            <dist-thunder1 type="double">0.0</dist-thunder1>
+            <dist-thunder2 type="double">0.0</dist-thunder2>
+            <dist-thunder3 type="double">0.0</dist-thunder3>
+            <environment-volume type="double">0.0</environment-volume>
+            <rain-volume type="double">0.0</rain-volume>
+            <incoming1 type="bool">false</incoming1>
+            <incoming2 type="bool">false</incoming2>
+            <incoming3 type="bool">false</incoming3>
+            <incoming4 type="bool">false</incoming4>
+            <incoming5 type="bool">false</incoming5>
+            <incoming6 type="bool">false</incoming6>
+            <incoming7 type="bool">false</incoming7>
+            <incoming8 type="bool">false</incoming8>
+            <incoming9 type="bool">false</incoming9>
+            <incoming10 type="bool">false</incoming10>
+            <incoming11 type="bool">false</incoming11>
+            <incoming12 type="bool">false</incoming12>
+            <incoming type="bool">false</incoming>
+        </sound>
+        <damage>
+            <enabled type="bool">true</enabled>
+        </damage>
+        <avionics>
+            <altimeters-calibrated type="bool">0</altimeters-calibrated>
+            <primaryData type="bool">false</primaryData>
+            <TN type="bool">false</TN>
+            <ignitionSys type="bool">false</ignitionSys>
+            <startSys type="bool">false</startSys>
+            <joystick type="bool">false</joystick>
+            <canopyAndSeat type="bool">false</canopyAndSeat>
+            <oxygen type="bool">false</oxygen>
+            <autopilot type="bool">false</autopilot>
+            <auto-throttle-on type="bool">false</auto-throttle-on>
+            <auto-altitude-on type="bool">false</auto-altitude-on>
+            <auto-attitude-on type="bool">false</auto-attitude-on>
+            <fuel-internal-ratio type="double">0.0</fuel-internal-ratio>
+            <tankpump type="bool">false</tankpump>
+            <xtank type="bool">false</xtank>
+            <fun type="bool">false</fun>
+        </avionics>
+        <systems>
+            <oxygen-bottle-pressure type="double">0.0</oxygen-bottle-pressure>
+        </systems>
+    </ja37>
     <ai>
         <submodels>
             <submodel n="2">
@@ -697,7 +697,7 @@
                     <!-- drag - Notice fuselage is about 0.024 at alpha=0 -->
                     <gear type="double">        0.020</gear>                    <!-- fully extended -->
                     <flaps type="double">       0.010</flaps>                    <!-- full 30 degrees downward deflection of canard flaps -->
-                    <missile type="double">     0.00011</missile> <!-- currently 10% of droptank for a aim-9 -->
+                    <missile type="double">     0.0001444</missile> <!-- aim-9 -->
                     <drop-tank type="double">   0.0015</drop-tank>
                     <canopy type="double">      0.025</canopy>                    <!-- fully open -->
                     <canopy-off type="double">  0.015</canopy-off>                    <!-- broken off -->
@@ -945,8 +945,14 @@
             </afterburner>
             <egt-degf type="double">0</egt-degf>
             <oil-pressure-psi type="double">0</oil-pressure-psi>
+            <rpm alias="/fdm/jsbsim/propulsion/engine/n1-rpm_r-min"/>
         </engine>
     </engines>
+    <rotors>
+        <main>
+            <rpm alias="/engines/engine/nozzle-pos-norm"/>
+        </main>
+    </rotors>
 
 
     <!--**********************************************************************
@@ -1139,6 +1145,9 @@
 		<navigation>
 			<file>Aircraft/JA37/Nasal/navigation.nas</file>
 		</navigation>
+        <blackout>
+            <file>Aircraft/JA37/Nasal/blackout.nas</file>
+        </blackout>
     </nasal>
 
     <!-- Logging to universal CSV format. change enabled to true to log -->

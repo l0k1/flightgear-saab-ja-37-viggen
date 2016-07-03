@@ -63,13 +63,14 @@ var centerOffset = -1 * (canvasWidth/2 - ((HUDTop - getprop("sim/view[0]/config/
 var pixelPerDegreeY = pixelPerMeter*(((getprop("sim/view[0]/config/z-offset-m") - HUDHoriz) * math.tan(7.5*deg2rads))/7.5); 
 var pixelPerDegreeX = pixelPerDegreeY; #horizontal axis
 #var slant = 35; #degrees the HUD is slanted away from the pilot.
-var sidewindPosition = centerOffset+(8*pixelPerDegreeY); #should be 10 degrees under aicraft axis.
+var distScalePos = 160;
+var sidewindPosition = centerOffset+(10*pixelPerDegreeY); #should be 10 degrees under aicraft axis.
 var sidewindPerKnot = max_width/30; # Max sidewind displayed is set at 30 kts. 450pixels is maximum is can move to the side.
 var radPointerProxim = (60/1024)*canvasWidth; #when alt indicater is too close to radar ground indicator, hide indicator
 var scalePlace = (200/1024)*canvasWidth; #horizontal placement of alt scales
 var numberOffset = (100/1024)*canvasWidth; #alt scale numbers horizontal offset from scale 
 var indicatorOffset = -(10/1024)*canvasWidth; #alt scale indicators horizontal offset from scale (must be high, due to bug #1054 in canvas) 
-var headScalePlace = (300/1024)*canvasWidth; # vert placement of alt scale
+var headScalePlace = (350/1024)*canvasWidth; # vert placement of heading scale, remember to change clip also.
 var headScaleTickSpacing = (65/1024)*canvasWidth;# horizontal spacing between ticks. Remember to adjust bounding box when changing.
 var altimeterScaleHeight = (225/1024)*canvasWidth; # the height of the low alt scale. Also used in the other scales as a reference height.
 var reticle_factor = 1.3;# size of flight path indicator, aiming reticle, and out of ammo reticle
@@ -80,11 +81,14 @@ var sideslipPlaceX = (325/1024)*canvasWidth;
 var sideslipPlaceY = (425/1024)*canvasWidth;
 var sideslipPlaceXFinal = 0;
 var sideslipPlaceYFinal = 0;
+var missile_aim_position = centerOffset+0.03*pixelPerMeter;
+var QFE_position = centerOffset+(5.5*pixelPerDegreeY);
+var dig_alt_position = centerOffset+(9.0*pixelPerDegreeY);
 var r = 0.6;#HUD colors
 var g = 1.0;
 var b = 0.6;
 var a = 1.0;
-var w = (getprop("sim/ja37/hud/stroke-linewidth")/1024)*canvasWidth;  #line stroke width (saved between sessions)
+var w = (getprop("ja37/hud/stroke-linewidth")/1024)*canvasWidth;  #line stroke width (saved between sessions)
 var ar = 1.0;#font aspect ratio, less than 1 make more wide.
 var fs = 0.8;#font size factor
 var artifacts0 = nil;
@@ -139,7 +143,7 @@ var HUDnasal = {
 
 
     # scale heading ticks
-    var clip = (62/1024)*canvasWidth~"px, "~(687/1024)*canvasWidth~"px, "~(262/1024)*canvasWidth~"px, "~(337/1024)*canvasWidth~"px";
+    var clip = (12/1024)*canvasWidth~"px, "~(687/1024)*canvasWidth~"px, "~(212/1024)*canvasWidth~"px, "~(337/1024)*canvasWidth~"px";
     HUDnasal.main.head_scale_grp = HUDnasal.main.root.createChild("group");
     HUDnasal.main.head_scale_grp.set("clip", "rect("~clip~")");#top,right,bottom,left
     HUDnasal.main.head_scale_grp_trans = HUDnasal.main.head_scale_grp.createTransform();
@@ -355,14 +359,14 @@ var HUDnasal = {
     HUDnasal.main.qfe.hide();
     HUDnasal.main.qfe.setColor(r,g,b, a);
     HUDnasal.main.qfe.setAlignment("center-center");
-    HUDnasal.main.qfe.setTranslation(-(365/1024)*canvasWidth, centerOffset+(5.5*pixelPerDegreeY));
+    HUDnasal.main.qfe.setTranslation(-(365/1024)*canvasWidth, QFE_position);
     HUDnasal.main.qfe.setFontSize((80/1024)*canvasWidth*fs, ar);
 
     # Altitude number (Not shown in landing/takeoff mode. Radar at less than 100 feet)
     HUDnasal.main.alt = HUDnasal.main.root.createChild("text");
     HUDnasal.main.alt.setColor(r,g,b, a);
     HUDnasal.main.alt.setAlignment("center-center");
-    HUDnasal.main.alt.setTranslation(-(375/1024)*canvasWidth, centerOffset+(7.5*pixelPerDegreeY));
+    HUDnasal.main.alt.setTranslation(-(375/1024)*canvasWidth, dig_alt_position);
     HUDnasal.main.alt.setFontSize((85/1024)*canvasWidth*fs, ar);
 
     # Collision warning arrow
@@ -395,7 +399,7 @@ var HUDnasal = {
     HUDnasal.main.reticle_missile =
       HUDnasal.main.root.createChild("path")
       .setColor(r,g,b, a)
-      .moveTo( (200/1024)*canvasWidth, centerOffset)
+      .moveTo( (200/1024)*canvasWidth, missile_aim_position)
       .arcSmallCW((200/1024)*canvasWidth,(200/1024)*canvasWidth, 0, -(400/1024)*canvasWidth, 0)
       .arcSmallCW((200/1024)*canvasWidth,(200/1024)*canvasWidth, 0,  (400/1024)*canvasWidth, 0)
       .setStrokeLineCap("round")
@@ -404,10 +408,10 @@ var HUDnasal = {
     HUDnasal.main.reticle_c_missile =
       HUDnasal.main.root.createChild("path")
       .setColor(r,g,b, a)
-      .moveTo( (150/1024)*canvasWidth, centerOffset-(75/1024)*canvasWidth)
-      .lineTo( (150/1024)*canvasWidth, centerOffset+(75/1024)*canvasWidth)
-      .moveTo( (-150/1024)*canvasWidth, centerOffset-(75/1024)*canvasWidth)
-      .lineTo( (-150/1024)*canvasWidth, centerOffset+(75/1024)*canvasWidth)
+      .moveTo( (150/1024)*canvasWidth, missile_aim_position-(75/1024)*canvasWidth)
+      .lineTo( (150/1024)*canvasWidth, missile_aim_position+(75/1024)*canvasWidth)
+      .moveTo( (-150/1024)*canvasWidth, missile_aim_position-(75/1024)*canvasWidth)
+      .lineTo( (-150/1024)*canvasWidth, missile_aim_position+(75/1024)*canvasWidth)
       .setStrokeLineWidth(w);      
     # Out of ammo flight path indicator
     HUDnasal.main.reticle_no_ammo =
@@ -757,7 +761,7 @@ var HUDnasal = {
     HUDnasal.main.tower_symbol_icao.setFontSize((60/1024)*canvasWidth*fs, ar);
 
     #distance scale
-    HUDnasal.main.dist_scale_group = HUDnasal.main.root.createChild("group").setTranslation(-(100/1024)*canvasWidth, (200/1024)*canvasWidth);
+    HUDnasal.main.dist_scale_group = HUDnasal.main.root.createChild("group").setTranslation(-(100/1024)*canvasWidth, (distScalePos/1024)*canvasWidth);
     HUDnasal.main.mySpeed = HUDnasal.main.dist_scale_group.createChild("path")
                             .moveTo(   0,   0)
                             .lineTo( -(10/1024)*canvasWidth, -(10/1024)*canvasWidth)
@@ -855,7 +859,7 @@ var HUDnasal = {
         alphaJSB:         "fdm/jsbsim/aero/alpha-deg",
         alt_ft:           "instrumentation/altimeter/indicated-altitude-ft",
         alt_ft_real:      "position/altitude-ft",
-        altCalibrated:    "sim/ja37/avionics/altimeters-calibrated",
+        altCalibrated:    "ja37/avionics/altimeters-calibrated",
         APHeadingBug:     "autopilot/settings/heading-bug-deg",
         APLockAlt:        "autopilot/locks/altitude",
         APLockHeading:    "autopilot/locks/heading",
@@ -864,12 +868,12 @@ var HUDnasal = {
         APTgtAlt:         "autopilot/settings/target-altitude-ft",
         APTrueHeadingErr: "autopilot/internal/true-heading-error-deg",
         beta:             "orientation/side-slip-deg",
-        callsign:         "sim/ja37/hud/callsign",
+        callsign:         "ja37/hud/callsign",
         cannonAmmo:       "ai/submodels/submodel[3]/count",
         carrierNear:      "fdm/jsbsim/ground/carrier-near",
-        combat:           "sim/ja37/hud/combat",
+        combat:           "ja37/hud/combat",
         ctrlRadar:        "controls/altimeter-radar",
-        currentMode:      "sim/ja37/hud/current-mode",
+        currentMode:      "ja37/hud/current-mode",
         dme:              "instrumentation/dme/KDI572-574/nm",
         dmeDist:          "instrumentation/dme/indicated-distance-nm",
         elapsedSec:       "sim/time/elapsed-sec",
@@ -878,14 +882,14 @@ var HUDnasal = {
         fdpitch:          "autopilot/settings/fd-pitch-deg",
         fdroll:           "autopilot/settings/fd-roll-deg",
         fdspeed:          "autopilot/settings/target-speed-kt",
-        fiveHz:           "sim/ja37/blink/five-Hz/state",
+        fiveHz:           "ja37/blink/five-Hz/state",
         gearsPos:         "gear/gear/position-norm",
         hdg:              "orientation/heading-magnetic-deg",
         hdgReal:          "orientation/heading-deg",
         ias:              "instrumentation/airspeed-indicator/indicated-speed-kt",#"/velocities/airspeed-kt",
-        landingMode:      "sim/ja37/hud/landing-mode",
+        landingMode:      "ja37/hud/landing-mode",
         mach:             "instrumentation/airspeed-indicator/indicated-mach",
-        mode:             "sim/ja37/hud/mode",
+        mode:             "ja37/hud/mode",
         nav0GSNeedleDefl: "instrumentation/nav[0]/gs-needle-deflection-norm",
         nav0GSInRange:    "instrumentation/nav[0]/gs-in-range",
         nav0HasGS:        "instrumentation/nav[0]/has-gs",
@@ -903,19 +907,19 @@ var HUDnasal = {
         srvHead:          "instrumentation/heading-indicator/serviceable",
         srvTurn:          "instrumentation/turn-indicator/serviceable",
         service:          "instrumentation/head-up-display/serviceable",
-        sideslipOn:       "sim/ja37/hud/bank-indicator",
+        sideslipOn:       "ja37/hud/bank-indicator",
         speed_d:          "velocities/speed-down-fps",
         speed_e:          "velocities/speed-east-fps",
         speed_n:          "velocities/speed-north-fps",
         station:          "controls/armament/station-select",
-        tenHz:            "sim/ja37/blink/ten-Hz/state",
-        terrainOn:        "sim/ja37/sound/terrain-on",
-        TILS:             "sim/ja37/hud/TILS",
+        tenHz:            "ja37/blink/ten-Hz/state",
+        terrainOn:        "ja37/sound/terrain-on",
+        TILS:             "ja37/hud/TILS",
         towerAlt:         "sim/tower/altitude-ft",
         towerLat:         "sim/tower/latitude-deg",
         towerLon:         "sim/tower/longitude-deg",
-        tracks_enabled:   "sim/ja37/hud/tracks-enabled",
-        units:            "sim/ja37/hud/units-metric",
+        tracks_enabled:   "ja37/hud/tracks-enabled",
+        units:            "ja37/hud/units-metric",
         viewNumber:       "sim/current-view/view-number",
         viewZ:            "sim/current-view/y-offset-m",
         vs:               "velocities/vertical-speed-fps",
@@ -1100,7 +1104,7 @@ var HUDnasal = {
   },
 
   displayHeadingScale: func () {
-    if (mode != LANDING or me.input.pitch.getValue() < -5 or me.input.pitch.getValue() > 9) {
+    if (mode != LANDING or me.input.pitch.getValue() < -2 or me.input.pitch.getValue() > 13.5) {
       if(me.input.srvHead.getValue() == TRUE) {
         var heading = me.input.hdg.getValue();
         var headOffset = heading/10 - int (heading/10);
@@ -1585,7 +1589,7 @@ var HUDnasal = {
     if (guideUseLines == FALSE) {
       var desired_alt_delta_ft = nil;
       if(mode == TAKEOFF) {
-        desired_alt_delta_ft = 1640-me.input.alt_ft.getValue();#500 meter
+        desired_alt_delta_ft = (500*M2FT)-me.input.alt_ft.getValue();
       } elsif (me.input.APLockAlt.getValue() == "altitude-hold" and me.input.APTgtAlt.getValue() != nil) {
         desired_alt_delta_ft = me.input.APTgtAlt.getValue()-me.input.alt_ft.getValue();
       } elsif (me.input.APLockAlt.getValue() == "agl-hold" and me.input.APTgtAgl.getValue() != nil) {
@@ -1844,6 +1848,7 @@ var HUDnasal = {
         air2air = FALSE;
         air2ground = TRUE;
         me.showSidewind(FALSE);
+        me.reticle_cannon.setTranslation(0, centerOffset);
         me.reticle_cannon.show();
         me.reticle_missile.hide();
         me.reticle_c_missile.show();
@@ -2242,7 +2247,7 @@ var HUDnasal = {
       me.distanceText.show();
       me.distanceScale.show();
       me.dist_scale_group.show();
-    } elsif (me.input.RMActive.getValue() == TRUE) {
+    } elsif (me.input.RMActive.getValue() == TRUE and me.input.rmDist.getValue() != nil) {
       var distance = me.input.rmDist.getValue();
       var line = (200/1024)*canvasWidth;
       var maxDist = 20;
@@ -2604,7 +2609,7 @@ var reinitHUD = FALSE;
 var hud_pilot = nil;
 var init = func() {
   removelistener(id); # only call once
-  if(getprop("sim/ja37/supported/hud") == TRUE) {
+  if(getprop("ja37/supported/hud") == TRUE) {
     hud_pilot = HUDnasal.new({"node": "hud", "texture": "hud.png"});
     #setprop("sim/hud/visibility[1]", 0);
     
@@ -2618,7 +2623,7 @@ var init2 = setlistener("/sim/signals/reinit", func() {
 }, 0, 0);
 
 #setprop("/systems/electrical/battery", 0);
-id = setlistener("sim/ja37/supported/initialized", init, 0, 0);
+id = setlistener("ja37/supported/initialized", init, 0, 0);
 
 var reinit = func(backup = FALSE) {#mostly called to change HUD color
    #reinitHUD = 1;
@@ -2630,12 +2635,12 @@ var reinit = func(backup = FALSE) {#mostly called to change HUD color
 
    foreach(var item; artifacts0) {
     item.setColor(red, green, blue, a);
-    item.setStrokeLineWidth((getprop("sim/ja37/hud/stroke-linewidth")/1024)*canvasWidth);
+    item.setStrokeLineWidth((getprop("ja37/hud/stroke-linewidth")/1024)*canvasWidth);
    }
 
    foreach(var item; artifacts1) {
     item.setColor(red, green, blue, a);
-    item.setStrokeLineWidth((getprop("sim/ja37/hud/stroke-linewidth")/1024)*canvasWidth);
+    item.setStrokeLineWidth((getprop("ja37/hud/stroke-linewidth")/1024)*canvasWidth);
    }
 
    foreach(var item; artifactsText0) {
@@ -2656,7 +2661,7 @@ var reinit = func(backup = FALSE) {#mostly called to change HUD color
 };
 
 var cycle_brightness = func () {
-  if(getprop("sim/ja37/hud/mode") > 0) {
+  if(getprop("ja37/hud/mode") > 0) {
     g += 0.2;
     if(g > 1.0 and r == 0.6) {
       #reset
@@ -2677,13 +2682,13 @@ var cycle_brightness = func () {
 };
 
 var cycle_units = func () {
-  if(getprop("sim/ja37/hud/mode") > 0) {
+  if(getprop("ja37/hud/mode") > 0) {
     ja37.click();
-    var current = getprop("sim/ja37/hud/units-metric");
+    var current = getprop("ja37/hud/units-metric");
     if(current == TRUE) {
-      setprop("sim/ja37/hud/units-metric", FALSE);
+      setprop("ja37/hud/units-metric", FALSE);
     } else {
-      setprop("sim/ja37/hud/units-metric", TRUE);
+      setprop("ja37/hud/units-metric", TRUE);
     }
   } else {
     aircraft.HUD.cycle_type();
@@ -2692,22 +2697,22 @@ var cycle_units = func () {
 
 var cycle_landingMode = func () {
     ja37.click();
-    var current = getprop("sim/ja37/hud/landing-mode");
+    var current = getprop("ja37/hud/landing-mode");
     if(current == TRUE) {
-      setprop("sim/ja37/hud/landing-mode", FALSE);
+      setprop("ja37/hud/landing-mode", FALSE);
     } else {
-      setprop("sim/ja37/hud/landing-mode", TRUE);
+      setprop("ja37/hud/landing-mode", TRUE);
     }
 };
 
 var toggle_combat = func () {
-  if(getprop("sim/ja37/hud/mode") > 0) {
+  if(getprop("ja37/hud/mode") > 0) {
     ja37.click();
-    var current = getprop("/sim/ja37/hud/combat");
+    var current = getprop("/ja37/hud/combat");
     if(current == 1) {
-      setprop("/sim/ja37/hud/combat", FALSE);
+      setprop("/ja37/hud/combat", FALSE);
     } else {
-      setprop("/sim/ja37/hud/combat", TRUE);
+      setprop("/ja37/hud/combat", TRUE);
     }
   } else {
     aircraft.HUD.cycle_color();
@@ -2715,13 +2720,13 @@ var toggle_combat = func () {
 };
 
 var toggleCallsign = func () {
-  if(getprop("sim/ja37/hud/mode") > 0) {
+  if(getprop("ja37/hud/mode") > 0) {
     ja37.click();
-    var current = getprop("/sim/ja37/hud/callsign");
+    var current = getprop("/ja37/hud/callsign");
     if(current == 1) {
-      setprop("/sim/ja37/hud/callsign", FALSE);
+      setprop("/ja37/hud/callsign", FALSE);
     } else {
-      setprop("/sim/ja37/hud/callsign", TRUE);
+      setprop("/ja37/hud/callsign", TRUE);
     }
   } else {
     aircraft.HUD.normal_type();

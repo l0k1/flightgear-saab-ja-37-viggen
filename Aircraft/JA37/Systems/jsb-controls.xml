@@ -272,11 +272,11 @@
                             0.00        1.00      0.75      0.50            
                             0.10        0.75      0.75      0.50
                             0.50        0.50      0.60      0.50
-                            0.65        0.33      0.60      0.50
-                            0.80        0.24      0.60      0.50
-                            1.00        0.21      0.48      0.50
-                            1.50        0.12      0.20      0.50
-                            2.00        0.07      0.10      0.50
+                            0.65        0.37      0.60      0.50
+                            0.80        0.28      0.60      0.50
+                            1.00        0.25      0.45      0.70
+                            1.50        0.15      0.30      0.70
+                            2.00        0.10      0.12      0.65
                         </tableData>
                     </table>
                     <!--<property>/test</property>-->
@@ -297,9 +297,9 @@
                             0.50        0.75      0.75      0.65
                             0.65        0.50      0.75      0.65
                             0.80        0.35      0.75      0.65
-                            1.00        0.30      0.65      0.65
-                            1.50        0.20      0.30      0.65
-                            2.00        0.10     0.20      0.65
+                            1.00        0.30      0.60      0.75
+                            1.50        0.20      0.35      0.75
+                            2.00        0.10      0.20      0.70
                         </tableData>
                     </table>
                     <!--<property>/test</property>-->
@@ -310,7 +310,7 @@
         <switch name="systems/flight/pitch-gearing">
             <default value="systems/flight/pitch-gearing-restrictive"/>
             <test logic="OR" value="systems/flight/pitch-gearing-fun">
-                /sim/ja37/avionics/fun == 1
+                /ja37/avionics/fun == 1
             </test>
         </switch>
 
@@ -1243,7 +1243,7 @@
         <fcs_function name="names/autopilot/Autopilot-min-elevator">
             <function>
                 <table>
-                    <independentVar lookup="row">/sim/ja37/accelerations/pilot-G</independentVar>
+                    <independentVar lookup="row">/ja37/accelerations/pilot-G</independentVar>
                     <tableData>
                         2.0           -0.75
                         4.0             0
@@ -1256,7 +1256,7 @@
         <fcs_function name="names/autopilot/Autopilot-max-elevator">
             <function>
                 <table>
-                    <independentVar lookup="row">/sim/ja37/accelerations/pilot-G</independentVar>
+                    <independentVar lookup="row">/ja37/accelerations/pilot-G</independentVar>
                     <tableData>
                        -1.0             0
                         0.0            0.75
